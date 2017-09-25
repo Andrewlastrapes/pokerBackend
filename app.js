@@ -5,7 +5,14 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var expressHbs = require("express-handlebars");
+var expressValidator = require('express-validator');
+var flash = require('connect-flash');
 var Hand = require("pokersolver").Hand;
+var mongoose = require("mongoose");
+var passport = require("passport");
+var session = require("express-session");
+
+
 
 
 

@@ -1,5 +1,10 @@
 var mongoose = require("mongoose");
+
+mongoose.connect('mongodb://localhost/Accounts')
+
+
 var Schema = mongoose.Schema; 
+
 
 
 var schema = new Schema({
@@ -11,4 +16,14 @@ var schema = new Schema({
 
 
 
-module.export = mongoose.model("Accounts", schema);
+var User = module.export = mongoose.model("Accounts", schema);
+
+
+module.exports.createUser = function(newUser, callback){
+	bcrypt.genSalt(10, function(err, salt) {
+	    bcrypt.hash(newUser.password, salt, function(err, hash) {
+	        newUser.password = hash;
+	        newUser.save(callback);
+	    });
+	});
+}
