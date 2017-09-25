@@ -118,9 +118,6 @@ function generateNewDeck(){
 
 
   function deal(currentState){
-
-    var hand = 0
-
    
  
     currentState.deck = generateNewDeck()
