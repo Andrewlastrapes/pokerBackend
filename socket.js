@@ -11,7 +11,8 @@ this.state = {
       phase: "preflop",
       pot: 0,
       fold: [],
-      raiseValue: 0
+      raiseValue: 0,
+      hand: 0
     }
   
 
@@ -118,11 +119,27 @@ function generateNewDeck(){
 
   function deal(currentState){
 
+    var hand = 0
+
    
  
     currentState.deck = generateNewDeck()
+    
+    currentState.hand = currentState.hand + 1
+
+if (currentState.hand === 1){
 
     for (var i = 0; i < currentState.users.length; i++){
+      currentState.users.push(currentState.users[i])
+    }
+
+      currentState.users.slice(-1).position = "Big Blind"
+      currentState.users.slice(-2, -1).position = "Small Blind"
+      currentState.users.slice(-3, -2).position = "Dealer"
+      currentState.users.slice(-4, -3).position = "firstToAct" 
+
+       for (var i = 0; i < currentState.users.length; i++){
+
       currentState.users[i].hand = [currentState.deck.pop(), currentState.deck.pop()]
       if (currentState.users[i].position === "Big Blind"){
        currentState.users[i].stack = currentState.users[i].stack - 1
@@ -135,6 +152,40 @@ function generateNewDeck(){
         currentState.pot = currentState.pot + .50
       }
     }
+    } else {
+
+      for (var i = 0; i < currentState.users.length; i++){
+
+       if (currentState.users[i].position === "Big Blind"){
+          currentState.users[i + 1].position ==="Big Blind"
+        }
+        if (currentState.users[i].position === "Small Blind"){
+          currentState.users[i + 1].position ==="Small Blind"
+        }
+        if (currentState.users[i].position === "Dealer"){
+          currentState.users[i + 1].position ==="Dealer"
+        }
+        if (currentState.users[i].position === "firstAfterPhase"){
+          currentState.users[i + 1].position ==="firstAfterPhase"
+        }
+      }
+
+      for (var i = 0; i < currentState.users.length; i++){
+
+      currentState.users[i].hand = [currentState.deck.pop(), currentState.deck.pop()]
+      if (currentState.users[i].position === "Big Blind"){
+       currentState.users[i].stack = currentState.users[i].stack - 1
+       currentState.users[i].bet = currentState.users[i].bet + 1
+        currentState.pot = currentState.pot + 1
+      }
+      if (currentState.users[i].position === "Small Blind"){
+       currentState.users[i].stack = currentState.users[i].stack - .50
+       currentState.users[i].bet = currentState.users[i].bet + .50
+        currentState.pot = currentState.pot + .50
+      }
+    }
+  }
+
 }
 
 
