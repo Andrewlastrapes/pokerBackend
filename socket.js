@@ -37,33 +37,49 @@ this.state = {
 
 	    socket.on("Dealing", () => {
 	    	deal(this.state)
-	    	socket.emit("newState", this.state)
+	    	io.emit("newState", this.state)
 		});
 
 	     socket.on("Raise", (raiseValue) => {
 	    	this.state.raiseValue = raiseValue
 	    	raise(this.state)
-	    	socket.emit("newState", this.state)
+	    	io.emit("newState", this.state)
 		});
 
 	      socket.on("Call", () => {
 	    	call(this.state)
-	    	socket.emit("newState", this.state)
+	    	io.emit("newState", this.state)
 		});
 
 	       socket.on("Check", () => {
 	    	check(this.state)
-	    	socket.emit("newState", this.state)
+	    	io.emit("newState", this.state)
 		});
 
 	       socket.on("Fold", () => {
 	       	fold(this.state)
-	       	socket.emit("newState", this.state)
+	       	io.emit("newState", this.state)
 	       })
 
 
-		socket.on("disconnect", (payload) => {
-			console.log("Someone disconnected")
+		socket.on("disconnect", () => {
+			console.log(this.state.users)
+      console.log(socket.id)
+      var disconnectingUser = []
+
+      for(var i = 0; i < this.state.users.length; i++){
+
+        if (this.state.users[i].socketID === socket.id){
+         
+         disconnectingUser = i
+
+          console.log(this.state.users[i].socketID + "disconnected")
+        }
+      }
+
+       this.state.users.splice(disconnectingUser, 1)
+      
+      io.emit("newState", this.state)
 		});
 	});
 
@@ -119,7 +135,8 @@ function generateNewDeck(){
 
   function deal(currentState){
    
- 
+    var players = []
+
     currentState.deck = generateNewDeck()
     
     currentState.hand = currentState.hand + 1
@@ -127,13 +144,29 @@ function generateNewDeck(){
 if (currentState.hand === 1){
 
     for (var i = 0; i < currentState.users.length; i++){
-      currentState.users.push(currentState.users[i])
+      players.push(currentState.users[i])
     }
 
-      currentState.users.slice(-1).position = "Big Blind"
-      currentState.users.slice(-2, -1).position = "Small Blind"
-      currentState.users.slice(-3, -2).position = "Dealer"
-      currentState.users.slice(-4, -3).position = "firstToAct" 
+
+    if (players.length >= 4){
+      currentState.users.splice(-1).position = "Big Blind"
+      currentState.users.splice(-2, -1).position = "Small Blind"
+      currentState.users.splice(-3, -2).position = "Dealer"
+      currentState.users.splice(-4, -3).position = "firstToAct" 
+    }
+    if (players.length === 3){
+      currentState.users.splice(-1).position = "Big Blind"
+      currentState.users.splice(-2, -1).position = "Small Blind"
+      currentState.users.splice(-3, -2).position = "Dealer"
+    }
+
+    if (players.length === 2){
+      currentState.users.splice(-1).position = "Big Blind"
+      currentState.users.splice(-2, -1).position = "Small Blind"
+      }
+
+
+
 
        for (var i = 0; i < currentState.users.length; i++){
 
@@ -453,6 +486,8 @@ function fold(currentState){
                   folds = folds + 1
                 }
               }
+               
+              // refactor 
                if (pass === false){
                 if (newUsers.length === folds - 3){
                   for (var i = 0; i < newUsers.length; i++){
@@ -466,10 +501,24 @@ function fold(currentState){
                           }
                        }  
                       }    
-          } 
+          }
+
+
 
             skip = true;
               }
+          
+
+          if(currentState.phase == "river"){
+            // pokerhand solver function
+
+
+
+
+            newPhase = "end hand"
+
+          }
+
         
       currentState.phase = newPhase;
   }

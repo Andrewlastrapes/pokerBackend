@@ -33,6 +33,27 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(session({
+	secret: 'secret',
+	saveUnitialized: true,
+	resave: true
+}))
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+app.use(flash());
+
+app.use(function (req, res, next) {
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  res.locals.error = req.flash('error');
+  res.locals.user = req.flash("error");
+  res.locals.user = req.user || null;
+  next();
+});
+
 app.use('/', index);
 app.use('/users', users);
 
