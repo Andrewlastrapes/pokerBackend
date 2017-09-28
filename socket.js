@@ -1,14 +1,17 @@
+let {deal} = require('./actions.js');
+
 module.exports = function setUpSockets(io){
 
 
 
 this.state = {
       users: [],
-      deck : generateNewDeck(),
+      waitingRoom: [],
+      deck : [],
       flop: [],
       turn: [],
       river: [],
-      phase: "preflop",
+      phase: "Game Over",
       pot: 0,
       fold: [],
       raiseValue: 0,
@@ -18,20 +21,24 @@ this.state = {
 
 	io.on('connection', (socket) => {
 		console.log("Someone connected")
-			
-		this.state.users.push({
-			
-		      username : "user1",
-		      clock : Date(),
-		      stack : 50,
-		      hand : [],
-		      position : "",
-		      isActive: true,
-		      folded: false,
-		      marker: false,
-		      bet: 0,
-		      socketID: socket.id
-	    });
+			var newUser = {
+         username : "User",
+          clock : Date(),
+          stack : 50,
+          hand : [],
+          position : "",
+          isActive: true,
+          folded: false,
+          marker: false,
+          bet: 0,
+          socketID: socket.id
+      }
+      if (this.state.phase === "Game Over" && this.state.users.length < 8){
+          this.state.users.push(newUser)
+      } else {
+		      this.state.waitingRoom.push(newUser)
+			}
+		     
 
 	    io.emit("newState", this.state)
 
@@ -85,138 +92,6 @@ this.state = {
 
 }
 
-
-
-
-function generateNewDeck(){
-  var hearts = []
-  var spades = []
-  var diamonds = []
-  var clubs = []
-
-  
-  for (var i = 2; i < 15; i++ ){
-    hearts.push({
-      number : i,
-      suit: "hearts"
-    })
-    spades.push({
-      number : i,
-      suit: "spades"
-    })
-    diamonds.push({
-      number : i,
-      suit: "diamonds"
-    })
-    clubs.push({
-      number : i,
-      suit: "clubs"
-    })  
-  }
-
-  var deck = hearts.concat(spades).concat(diamonds).concat(clubs);
-  var currentIndex = deck.length, temporaryValue, randomIndex
-  while(0 !== currentIndex){
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-    temporaryValue = deck[currentIndex];
-    deck[currentIndex] = deck[randomIndex];
-    deck[randomIndex] = temporaryValue;
-  }
-
-  return deck;
-
-}
-
-
-
-
-
-
-  function deal(currentState){
-   
-    var players = []
-
-    currentState.deck = generateNewDeck()
-    
-    currentState.hand = currentState.hand + 1
-
-if (currentState.hand === 1){
-
-    for (var i = 0; i < currentState.users.length; i++){
-      players.push(currentState.users[i])
-    }
-
-
-    if (players.length >= 4){
-      currentState.users.splice(-1).position = "Big Blind"
-      currentState.users.splice(-2, -1).position = "Small Blind"
-      currentState.users.splice(-3, -2).position = "Dealer"
-      currentState.users.splice(-4, -3).position = "firstToAct" 
-    }
-    if (players.length === 3){
-      currentState.users.splice(-1).position = "Big Blind"
-      currentState.users.splice(-2, -1).position = "Small Blind"
-      currentState.users.splice(-3, -2).position = "Dealer"
-    }
-
-    if (players.length === 2){
-      currentState.users.splice(-1).position = "Big Blind"
-      currentState.users.splice(-2, -1).position = "Small Blind"
-      }
-
-
-
-
-       for (var i = 0; i < currentState.users.length; i++){
-
-      currentState.users[i].hand = [currentState.deck.pop(), currentState.deck.pop()]
-      if (currentState.users[i].position === "Big Blind"){
-       currentState.users[i].stack = currentState.users[i].stack - 1
-       currentState.users[i].bet = currentState.users[i].bet + 1
-        currentState.pot = currentState.pot + 1
-      }
-      if (currentState.users[i].position === "Small Blind"){
-       currentState.users[i].stack = currentState.users[i].stack - .50
-       currentState.users[i].bet = currentState.users[i].bet + .50
-        currentState.pot = currentState.pot + .50
-      }
-    }
-    } else {
-
-      for (var i = 0; i < currentState.users.length; i++){
-
-       if (currentState.users[i].position === "Big Blind"){
-          currentState.users[i + 1].position ==="Big Blind"
-        }
-        if (currentState.users[i].position === "Small Blind"){
-          currentState.users[i + 1].position ==="Small Blind"
-        }
-        if (currentState.users[i].position === "Dealer"){
-          currentState.users[i + 1].position ==="Dealer"
-        }
-        if (currentState.users[i].position === "firstAfterPhase"){
-          currentState.users[i + 1].position ==="firstAfterPhase"
-        }
-      }
-
-      for (var i = 0; i < currentState.users.length; i++){
-
-      currentState.users[i].hand = [currentState.deck.pop(), currentState.deck.pop()]
-      if (currentState.users[i].position === "Big Blind"){
-       currentState.users[i].stack = currentState.users[i].stack - 1
-       currentState.users[i].bet = currentState.users[i].bet + 1
-        currentState.pot = currentState.pot + 1
-      }
-      if (currentState.users[i].position === "Small Blind"){
-       currentState.users[i].stack = currentState.users[i].stack - .50
-       currentState.users[i].bet = currentState.users[i].bet + .50
-        currentState.pot = currentState.pot + .50
-      }
-    }
-  }
-
-}
 
 
 function call(currentState){
@@ -522,6 +397,7 @@ function fold(currentState){
         
       currentState.phase = newPhase;
   }
+
 
 
 
