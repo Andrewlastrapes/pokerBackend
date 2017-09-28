@@ -40,7 +40,7 @@ function generateNewDeck(){
 
 }
 
-
+// Game over function that resets everything
 
 
 
@@ -132,11 +132,114 @@ function deal(currentState){
 		} 
 
 	}
+	for (var i = 0; i < currentState.users.length; i++){
+		if (currentState.users[i].position === "Small Blind"){
+			currentState.users[i].stack -= 1
+			currentState.users[i].bet += 1
+			currentState.pot += 1
+		}
+		if (currentState.users[i].position === "Small Blind" - 1){
+			currentState.users[i].stack -= .50
+			currentState.users[i].bet += .50
+			currentState.pot += .50
+		} 
+
+	}
+
+}
+
+// fold
+
+// folded array- pops folded users into new array
+
+function fold(currentState){
+
+	var index = []
+
+	// Pushes current user into foldedUsers array 
+
+	for (var i = 0; i < currentState.users.length; i++){
+
+		if(currentState.users[i].isActive === true){
+			currentState.foldedUsers.push(currentState.users[i])
+			index = i
+		}
+	}
+	currentState.users.splice(index, 1)
+	
+	// 
+	if (currentState.users.length === 1){
+		currentState.users[0].stack += currentState.pot
+
+
+		currentState.phase = "Game Over"
+		console.log("Hand Over")
+			
+	} else {
+	
+	nextTurn(currentState)
+	}
+
+}
+
+function firstToAct(currentState){
+	
+	var newActive = 0
+
+	for (var i = 0; i < currentState.users.length; i++){
+		if(currentState.users[i] === "Dealer"){
+			newActive = i
+		}
+	}
+		currentState.users[newActive + 1].isActive = true;
+}
+
+
+// Next Turn:
+
+// Needs to activate next user
+
+// Change phase - sets first to act on each new phase. Another function?
+
+
+function nextTurn(currentState){
+
+		var newActive = 0
+     
+
+    // Deactivates current user, and activates next user. 
+
+    for (var i = 0; i < currentState.users.length; i++){
+
+	   if (currentState.users[i].isActive == true){
+         currentState.users[i].isActive = false 
+         
+        
+         newActive = i + 1 
+        }
+
+         if (newActive == currentState.users.length){
+          newActive = 0;
+         }
+    
+    }
+
+    	currentState.users[newActive].isActive = true
+
 
 }
 
 
 
+
+
+	
+
+
+
+
 module.exports = {
-	deal
+	deal, 
+	nextTurn,
+	fold
 }

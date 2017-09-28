@@ -1,4 +1,4 @@
-let {deal} = require('./actions.js');
+let {deal, nextTurn, fold} = require('./actions.js');
 
 module.exports = function setUpSockets(io){
 
@@ -7,6 +7,7 @@ module.exports = function setUpSockets(io){
 this.state = {
       users: [],
       waitingRoom: [],
+      foldedUsers: [],
       deck : [],
       flop: [],
       turn: [],
@@ -122,7 +123,7 @@ function call(currentState){
 
 
           
-         nextTurn(currentState, false)
+         nextTurn(currentState)
 }
 
 
@@ -130,7 +131,7 @@ function check(currentState){
 
      
    
-       nextTurn(currentState, false)
+       nextTurn(currentState)
 }
 
 
@@ -159,244 +160,244 @@ function raise(currentState){
         
        
 
-   		nextTurn(currentState, true)
+   		nextTurn(currentState)
 
 }
 
 
-function fold(currentState){
+// function fold(currentState){
 
   
 
 
-   var fold = []
+//    var fold = []
    
    
-    for (var i = 0; i < currentState.users.length; i++){
+//     for (var i = 0; i < currentState.users.length; i++){
   
-        if (currentState.users[i].isActive === true){
-         currentState.users[i].folded = true;
-      }
-        if (currentState.users[i].folded === true){
-        fold.push(currentState.users[i])
+//         if (currentState.users[i].isActive === true){
+//          currentState.users[i].folded = true;
+//       }
+//         if (currentState.users[i].folded === true){
+//         fold.push(currentState.users[i])
        
         
-       }  
-     }
+//        }  
+//      }
         
-        for (var i = 0; i < currentState.users.length; i++){
-          if (currentState.users.length - fold.length === 1){
-            if (currentState.users[i].folded == false){
-              var winner = currentState.users[i]
-              winner.stack = currentState.pot + winner.stack 
+//         for (var i = 0; i < currentState.users.length; i++){
+//           if (currentState.users.length - fold.length === 1){
+//             if (currentState.users[i].folded == false){
+//               var winner = currentState.users[i]
+//               winner.stack = currentState.pot + winner.stack 
                
-                  break;
-                  }
+//                   break;
+//                   }
 
                  
-        }
+//         }
       
-     }
+//      }
      
 
-    	nextTurn(currentState, false)
+//     	nextTurn(currentState)
       
 
       
-    }
+//     }
 
 
-  function nextTurn(currentState, preventsPhaseChange){
+  // function nextTurn(currentState, preventsPhaseChange){
        
-       var newUsers = currentState.users
-       var newPhase = currentState.phase
-       var newActive = 0
-       var oldActive = 0
-       var skip = false
+  //      var newUsers = currentState.users
+  //      var newPhase = currentState.phase
+  //      var newActive = 0
+  //      var oldActive = 0
+  //      var skip = false
        
    
-    for (var i = 0; i < newUsers.length; i++){
+  //   for (var i = 0; i < newUsers.length; i++){
       
-        if (newUsers[i].isActive == true){
-         newUsers[i].isActive = false 
-         oldActive = i
+  //       if (newUsers[i].isActive == true){
+  //        newUsers[i].isActive = false 
+  //        oldActive = i
         
-         newActive = i + 1 
-        }
+  //        newActive = i + 1 
+  //       }
 
-         if (newActive == currentState.users.length){
-          newActive = 0;
-         }
+  //        if (newActive == currentState.users.length){
+  //         newActive = 0;
+  //        }
          
-      }
-      while(newUsers[newActive].folded == true){
-        newActive++
-      }
+  //     }
+  //     while(newUsers[newActive].folded == true){
+  //       newActive++
+  //     }
      
-      newUsers[newActive].isActive = true
+  //     newUsers[newActive].isActive = true
       
-      if(newUsers[oldActive].marker == true && preventsPhaseChange == false) {
+  //     if(newUsers[oldActive].marker == true && preventsPhaseChange == false) {
         
       
         
-        if(currentState.phase == "preflop"){
-          flop(currentState)
+  //       if(currentState.phase == "preflop"){
+  //         flop(currentState)
          
-          newPhase = "flop"
+  //         newPhase = "flop"
          
-          var folds = 0
-          var firstToAct = 0
-          var pass = false
+  //         var folds = 0
+  //         var firstToAct = 0
+  //         var pass = false
          
-         for (var i = 0; i < newUsers.length; i++){
-            if (newUsers[i].position === "firstAfterPhase"){
-              firstToAct = i
-            }
-            if(newUsers[i].isActive === true){
-              newUsers[i].isActive = false;
+  //        for (var i = 0; i < newUsers.length; i++){
+  //           if (newUsers[i].position === "firstAfterPhase"){
+  //             firstToAct = i
+  //           }
+  //           if(newUsers[i].isActive === true){
+  //             newUsers[i].isActive = false;
               
-            }
-          }
+  //           }
+  //         }
         
-          for (var i = firstToAct;  i >= 0; i-- ){
-            if(newUsers[i].folded === false){
-              newUsers[i].isActive = true;
-              pass = true;
-              break;
-              } else {
-                folds = folds + 1
-              }
-            }
+  //         for (var i = firstToAct;  i >= 0; i-- ){
+  //           if(newUsers[i].folded === false){
+  //             newUsers[i].isActive = true;
+  //             pass = true;
+  //             break;
+  //             } else {
+  //               folds = folds + 1
+  //             }
+  //           }
       
-            if (pass === false){
-              if (newUsers.length - 3 === folds){
-                for (var i = 0; i < newUsers.length; i++){
-                  if (newUsers[i].position === "firstAfterPhase"){
-                    if (newUsers[i + 1].folded === false){
-                      newUsers[i + 1].isActive = true
-                      } else {
-                          newUsers[i + 2].isActive = true;
-                              }
-                         }  
-                        }
-                     }  
-                    }    
+  //           if (pass === false){
+  //             if (newUsers.length - 3 === folds){
+  //               for (var i = 0; i < newUsers.length; i++){
+  //                 if (newUsers[i].position === "firstAfterPhase"){
+  //                   if (newUsers[i + 1].folded === false){
+  //                     newUsers[i + 1].isActive = true
+  //                     } else {
+  //                         newUsers[i + 2].isActive = true;
+  //                             }
+  //                        }  
+  //                       }
+  //                    }  
+  //                   }    
 
-                skip = true
+  //               skip = true
 
-          } 
+  //         } 
 
 
-        if (skip === false){
+  //       if (skip === false){
 
-          if (currentState.phase == "flop"){
-           turn(currentState)
+  //         if (currentState.phase == "flop"){
+  //          turn(currentState)
             
-            newPhase = "turn"
+  //           newPhase = "turn"
 
 
-            var folds = 0
-            var firstToAct = 0
-            var pass = false
+  //           var folds = 0
+  //           var firstToAct = 0
+  //           var pass = false
 
-             for (var i = 0; i < newUsers.length; i++){
-              if (newUsers[i].position === "firstAfterPhase"){
-                firstToAct = i
-              }
-              if(newUsers[i].isActive === true){
-                newUsers[i].isActive = false;
-              }
-            }
+  //            for (var i = 0; i < newUsers.length; i++){
+  //             if (newUsers[i].position === "firstAfterPhase"){
+  //               firstToAct = i
+  //             }
+  //             if(newUsers[i].isActive === true){
+  //               newUsers[i].isActive = false;
+  //             }
+  //           }
           
            
             
 
-            for (var i = firstToAct;  i >= 0; i--){
-              if(newUsers[i].folded === false){
-                newUsers[i].isActive = true;
-                var pass = true;
-                break;
-                } else {
-                  folds = folds + 1
-                }
-              }
-               if (pass === false){
-                if (newUsers.length === folds - 3){
-                  for (var i = 0; i < newUsers.length; i++){
-                    if (newUsers[i].position === "firstAfterPhase"){
-                      if (newUsers[i + 1].folded === false){
-                        newUsers[i + 1].isActive = true
-                        } else {
-                            newUsers[i + 2].isActive = true;
-                                }
-                           }  
-                          }
-                       }  
-                      }    
-          } 
+  //           for (var i = firstToAct;  i >= 0; i--){
+  //             if(newUsers[i].folded === false){
+  //               newUsers[i].isActive = true;
+  //               var pass = true;
+  //               break;
+  //               } else {
+  //                 folds = folds + 1
+  //               }
+  //             }
+  //              if (pass === false){
+  //               if (newUsers.length === folds - 3){
+  //                 for (var i = 0; i < newUsers.length; i++){
+  //                   if (newUsers[i].position === "firstAfterPhase"){
+  //                     if (newUsers[i + 1].folded === false){
+  //                       newUsers[i + 1].isActive = true
+  //                       } else {
+  //                           newUsers[i + 2].isActive = true;
+  //                               }
+  //                          }  
+  //                         }
+  //                      }  
+  //                     }    
+  //         } 
 
-            skip = true;
-      }
+  //           skip = true;
+  //     }
 
 
-      if (skip === false){
-          if(currentState.phase == "turn"){
-            river(currentState)
-            newPhase = "river"
-            } 
-             for (var i = 0; i < newUsers.length; i++){
-              if (newUsers[i].position === "firstAfterPhase"){
-                firstToAct = i
-              }
-              if(newUsers[i].isActive === true){
-                newUsers[i].isActive = false;
-              }
-            }
+  //     if (skip === false){
+  //         if(currentState.phase == "turn"){
+  //           river(currentState)
+  //           newPhase = "river"
+  //           } 
+  //            for (var i = 0; i < newUsers.length; i++){
+  //             if (newUsers[i].position === "firstAfterPhase"){
+  //               firstToAct = i
+  //             }
+  //             if(newUsers[i].isActive === true){
+  //               newUsers[i].isActive = false;
+  //             }
+  //           }
           
-            for (var i = firstToAct;  i >= 0; i-- ){
-              if(newUsers[i].folded === false){
-                newUsers[i].isActive = true;
-                break;
-                } else {
-                  folds = folds + 1
-                }
-              }
+  //           for (var i = firstToAct;  i >= 0; i-- ){
+  //             if(newUsers[i].folded === false){
+  //               newUsers[i].isActive = true;
+  //               break;
+  //               } else {
+  //                 folds = folds + 1
+  //               }
+  //             }
                
-              // refactor 
-               if (pass === false){
-                if (newUsers.length === folds - 3){
-                  for (var i = 0; i < newUsers.length; i++){
-                    if (newUsers[i].position === "firstAfterPhase"){
-                      if (newUsers[i + 1].folded === false){
-                        newUsers[i + 1].isActive = true
-                        } else {
-                            newUsers[i + 2].isActive = true;
-                                }
-                           }  
-                          }
-                       }  
-                      }    
-          }
+  //             // refactor 
+  //              if (pass === false){
+  //               if (newUsers.length === folds - 3){
+  //                 for (var i = 0; i < newUsers.length; i++){
+  //                   if (newUsers[i].position === "firstAfterPhase"){
+  //                     if (newUsers[i + 1].folded === false){
+  //                       newUsers[i + 1].isActive = true
+  //                       } else {
+  //                           newUsers[i + 2].isActive = true;
+  //                               }
+  //                          }  
+  //                         }
+  //                      }  
+  //                     }    
+  //         }
 
 
 
-            skip = true;
-              }
+  //           skip = true;
+  //             }
           
 
-          if(currentState.phase == "river"){
-            // pokerhand solver function
+  //         if(currentState.phase == "river"){
+  //           // pokerhand solver function
 
 
 
 
-            newPhase = "end hand"
+  //           newPhase = "end hand"
 
-          }
+  //         }
 
         
-      currentState.phase = newPhase;
-  }
+  //     currentState.phase = newPhase;
+  // }
 
 
 
