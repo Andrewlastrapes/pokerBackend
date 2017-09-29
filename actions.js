@@ -2,14 +2,14 @@
 function flop(currentState){
 
        
-       currentState.flop = [this.state.deck.pop(), this.state.deck.pop(), this.state.deck.pop()]
+       currentState.flop = [currentState.deck.pop(), currentState.deck.pop(), currentState.deck.pop()]
       
   }
 
   function turn(currentState){
     
      
-        currentState.turn = [this.state.deck.pop()]
+        currentState.turn = [currentState.deck.pop()]
       
     
   }
@@ -17,7 +17,7 @@ function flop(currentState){
   function river(currentState){
    
      
-        currentState.river = [this.state.deck.pop()]
+        currentState.river = [currentState.deck.pop()]
   
   }
 
@@ -70,34 +70,21 @@ function generateNewDeck(){
 function reset(currentState){
 		
 	for (var i = 0; i < currentState.users.length; i++){
-		currentState.users.bet = 0;
-		currentState.users.hand = [];
-		currentState.users.isActive = false;
-		currentState.users.marker = false;
-		currentState.users.position = ""
+		currentState.users[i].bet = 0;
+		currentState.users[i].hand = [];
+		currentState.users[i].isActive = false;
+		currentState.users[i].marker = false;
+		currentState.users[i].position = ""
+		currentState.users[i].Rmarker = false
+		currentState.users[i].folded = false
 	}
 		currentState.pot = 0;
 		currentState.fold = 0;
 		currentState.phase = "Game Over";
+
 		console.log("hi")
 	}
 
-
-
-
-// How the next phase happens:
-
-// Game Over- Deal handles phase change
-
-// 2 Markers: BBmarker and RMarker
-
-// for all phases:
-
-// On check- BBmarker = new phase
-
-// on Raise = BBmarker = false until next phase. RMarker = true
-
-// Phase change- User left of RMarker calls or folds. 
 
 
 
@@ -108,7 +95,7 @@ function activateLeftOfDealer(currentState){
 	var dealerMarker = 0
 
 	for (var i = 0; i < currentState.users.length; i++){
-		if( currentState.users[i].position = “dealer”){
+		if( currentState.users[i].position === "Dealer"){
 		    dealerMarker = i 
 		    }
 		}
@@ -130,7 +117,7 @@ function setMarker(currentState){
 			activeMarker = i
 		}
 	}
-		if(currentState.users[activeMarker - 1] === -1){
+		if(activeMarker - 1 === -1){
 			currentState.users[currentState.users.length - 1].marker = true;
 		}	else {
 			currentState.users[activeMarker - 1].marker = true;
@@ -143,7 +130,8 @@ function setPhase(currentState){
 	activateLeftOfDealer(currentState)
 	setMarker(currentState)
 	for (var i = 0; i < currentState.users.length; i++){
-		currentState.users.bet = 0;
+		currentState.users[i].bet = 0;
+		currentState.users[i].Rmarker = false;
 
 	}
 }
@@ -153,71 +141,53 @@ function setPhase(currentState){
 function nextPhase(currentState){
 	if(currentState.phase === "turn"){
 		currentState.phase = "river"
+		river(currentState)
 		setPhase(currentState)
 	}
-	if(currentState.phase === "flop"){
+	else if(currentState.phase === "flop"){
 		currentState.phase = "turn"
+		turn(currentState)
 		setPhase(currentState)
 	}
-	if (currentState.phase === "preflop"){
+	else if (currentState.phase === "preflop"){
 		currentState.phase = "flop"
+		flop(currentState)
 		setPhase(currentState)
 	}
 }
 
-
-
-// function checkForNewPhase(currentState){
+function setPositions(currentState){
 	
-// 	var marker = 0;
-// 	var pass = false;
+	var indexOfBigBlind = -1
+	var indexOfDealer = -1
 
-// 	for (var i = 0; i < currentState.users.length; i++) {
-// 			if(currentState.users[i].isActive === true && currentState.users[i].marker === true){
-// 				if (currentState.phase === "preflop"){
-// 				flop(currentState)
-// 				// first to act
-// 				currentState.phase = "flop";
-// 				pass = true;
-// 				} 
-// 			} 
-		
-// 	} 
+  	for (var i = 0; i < currentState.users.length; i++){
+  		if(currentState.users[i].position === "Big Blind"){
+  			indexOfBigBlind = i
+		}
+		if(currentState.users[i].position === "Dealer"){
+			indexOfDealer = i
+		}
+  	}
 
-// 	if (pass === false){
+  	// Rotate
 
-// 	for (var i = 0; i < currentState.users.length; i++) {
-// 			if (currentState.users[i].marker === true){
-// 				marker = i;
-// 			}
-// 		}
-// 		for (var i = 0; i < currentState.users.length; i++) {
-// 			if (currentState.users[marker - 1].isActive === true){
-// 				if (currentState.phase === "turn"){
-// 					river(currentState);
-// 					// first to act
-// 					currentState.phase = "river";
-// 					pass = true;
-// 				}
-// 				if (currentState.phase === "flop"){
-// 					turn(currentState);
-// 					// first to act
-// 					currentState.phase = "turn";
-// 					pass = true;
-// 					}	 
-// 			}
-// 		}
-// 	}
-	
-// 	if (pass === false){
-// 		nextTurn(currentState)
-// 	}
-	
-// }
+  	if (indexOfBigBlind > -1 && indexOfDealer > -1){
+  		currentState.users[indexOfBigBlind].position = "";
+  		currentState.users[indexOfDealer].position = "";
+ 		currentState.users[(indexOfBigBlind + 1) % currentState.users.length].position = "Big Blind";
+  		currentState.users[(indexOfDealer + 1) % currentState.users.length].position = "Dealer";
+  		
+  	} else {
+  		currentState.users[0].position = "Big Blind"
+  			if(currentState.users.length > 2){
+  				currentState.users[2] === "Dealer"
+  			} else {
+  				currentState.users[1] === "Dealer"
+  			}
+  	}
+}
 
-	
-	
-	
 
 function deal(currentState){
 
@@ -245,24 +215,7 @@ function deal(currentState){
 		currentState.users[i].hand = [currentState.deck.pop(), currentState.deck.pop()]
   	}
 
-
-  	// Set big blind
-  	
-  	var indexOfBigBlind = -1
-
-  	for (var i = 0; i < currentState.users.length; i++){
-  		if(currentState.users[i].position === "Big Blind"){
-  			indexOfBigBlind = i
-  		}
-  	}
-
-  	if (indexOfBigBlind > -1){
-  		currentState.users[(indexOfBigBlind + 1) % currentState.users.length].position = "Big Blind";
-  		currentState.users[indexOfBigBlind].position = "";
-  	} else {
-  		currentState.users[0].position = "Big Blind"
-  	}
-
+  	setPositions(currentState)
 
   	// set initial marker
 
@@ -296,32 +249,121 @@ function deal(currentState){
 
   	for (var i = 0; i < currentState.users.length; i++){
 		if (currentState.users[i].position === "Big Blind"){
+			var smallBlind = i - 1
+			if(smallBlind === -1){
+				smallBlind = currentState.users.length - 1
+			}
 			currentState.users[i].stack -= 1
 			currentState.users[i].bet += 1
 			currentState.pot += 1
-		}
-		if (currentState.users[i].position === "Big Blind" - 1){
-			currentState.users[i].stack -= .50
-			currentState.users[i].bet += .50
+			currentState.users[smallBlind].stack -= .50
+			currentState.users[smallBlind].bet += .50
 			currentState.pot += .50
 		} 
 
 	}
-	for (var i = 0; i < currentState.users.length; i++){
-		if (currentState.users[i].position === "Small Blind"){
-			currentState.users[i].stack -= 1
-			currentState.users[i].bet += 1
-			currentState.pot += 1
-		}
-		if (currentState.users[i].position === "Small Blind" - 1){
-			currentState.users[i].stack -= .50
-			currentState.users[i].bet += .50
-			currentState.pot += .50
-		} 
+	
+}
 
-	}
+function raise(currentState){
+  
+   var raiser = []
+   var pot = 0
+   
+    for (var i = 0; i < currentState.users.length; i++){
+   
+        if (currentState.users[i].marker == true){
+          currentState.users[i].marker = false;
+
+        }
+        if (currentState.users[i].isActive == true){
+        
+         currentState.users[i].Rmarker = true;
+         raiser = currentState.users[i]
+
+          } 
+       }
+
+         pot = currentState.pot + parseInt(currentState.raiseValue)
+         raiser.stack = raiser.stack - parseInt(currentState.raiseValue)
+         raiser.bet = parseInt(currentState.raiseValue)
+
+        
+       
+
+   		nextTurn(currentState)
 
 }
+
+
+function check(currentState){
+	var activeUserHasMarker = false;
+
+      for (var i = 0; i < currentState.users.length; i++){
+        if(currentState.users[i].isActive === true && currentState.users[i].marker === true){
+          activeUserHasMarker = true;
+        }
+       }
+       if (activeUserHasMarker === true){
+       	nextPhase(currentState)
+       } else {
+       	nextTurn(currentState)
+     }
+}
+
+
+
+function call(currentState){
+
+       var indexRmarker = -1
+       var markerIndex = -1
+       var caller = 0
+       var callerIndex = 0
+
+
+
+      for (var i = 0; i < currentState.users.length; i++){
+    
+        if (currentState.users[i].marker === true){
+          markerIndex = i
+        }
+        if(currentState.users[i].isActive === true){
+          caller = currentState.users[i]
+          callerIndex = i
+        }
+        if(currentState.users[i].Rmarker === true){
+          indexRmarker = i;
+        }
+
+    } 
+    	// Detect if we're in rMarker or marker mode
+    	if (markerIndex === -1){
+    		var marker = currentState.users[indexRmarker]
+    	} else {
+    		var marker = currentState.users[markerIndex]
+    	}
+        // Adds call into pot and matches raisers bet. 
+
+        
+        currentState.pot += marker.bet - caller.bet
+        caller.stack -= marker.bet - caller.bet
+        caller.bet = marker.bet
+       
+    
+
+        if(indexRmarker === -1){
+        	nextTurn(currentState)
+        } else{
+	          if (indexRmarker - callerIndex === 1 || indexRmarker - callerIndex === -(currentState.users.length - 1)){
+	            nextPhase(currentState)
+	           } else {
+	            nextTurn(currentState)
+	          }
+	         }
+}
+
+
+
 
 // fold
 
@@ -329,15 +371,20 @@ function deal(currentState){
 
 function fold(currentState){
 
-	
+	var indexRmarker = 0;
+	var folderIndex = 0
 
 	for (var i = 0; i < currentState.users.length; i++){
 
 		if(currentState.users[i].isActive === true){
 			currentState.users[i].folded = true;
 			currentState.fold += 1
+			folderIndex = i
 	
 		}
+		if(currentState.users[i].Rmarker === true){
+          indexRmarker = i;
+        }
 	}
 	
 	if(currentState.users.length - currentState.fold === 1){
@@ -351,31 +398,16 @@ function fold(currentState){
 		console.log("Hand Over")
 			
 	} else {
-		 for (var i = 0; i < currentState.users[i]; i++){
-
-          // if (currentState.users[i] is 1 left of rMarker)
-            NextPhase(currentState)
-          } else {
+		 
+		 if (indexRmarker - folderIndex === 1 || indexRmarker - folderIndex === -(currentState.users.length - 1)){
+            nextPhase(currentState)
+           } else {
             nextTurn(currentState)
           }
-	
+
 	}
 
 }
-
-function firstToAct(currentState){
-	
-	var newActive = 0
-
-	for (var i = 0; i < currentState.users.length; i++){
-		if(currentState.users[i] === "Dealer"){
-			newActive = i
-		}
-	}
-		currentState.users[newActive + 1].isActive = true;
-}
-
-
 
 // Next Turn:
 
@@ -422,10 +454,9 @@ function nextTurn(currentState){
 
 
 module.exports = {
-	deal, 
-	nextTurn,
+	deal,
 	fold,
-	reset,
-	firstToAct,
-	checkForNewPhase
+	call,
+	check,
+	raise
 }

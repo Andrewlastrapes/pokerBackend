@@ -1,4 +1,4 @@
-let {deal, nextTurn, fold, reset, firstToAct, checkForNewPhase} = require('./actions.js');
+let {deal, fold, call, check, raise } = require('./actions.js');
 
 module.exports = function setUpSockets(io){
 
@@ -68,10 +68,7 @@ this.state = {
 	       	fold(this.state)
 	       	io.emit("newState", this.state)
 	       });
-         socket.on("Reset", () => {
-          reset(this.state)
-          io.emit("newState", this.state)
-         });
+        
 
 
 		socket.on("disconnect", () => {
@@ -99,83 +96,9 @@ this.state = {
 
 
 
-function call(currentState){
-
-    
-       var marker = []
-       var caller = []
 
 
 
-      for (var i = 0; i < currentState.users.length; i++){
-    
-        if (currentState.users[i].marker == true){
-          marker = currentState.users[i]
-        }
-        if(currentState.users[i].isActive == true){
-          caller = currentState.users[i]
-        }
-
-    } 
-        // Adds call into pot and matches raisers bet. 
-
-        caller.bet = marker.bet
-        currentState.pot = currentState.pot + caller.bet
-        caller.stack = caller.stack - caller.bet
-
-         
-        for (var i = 0; i < currentState.users[i]; i++){
-
-          // if (currentState.users[i] is 1 left of rMarker)
-            NextPhase(currentState)
-          } else {
-            nextTurn()
-          }
-}
-
-
-function check(currentState){
-
-      for (var i = 0; i < currentState.users.length; i++){
-        if(currentState.users[i].isActive === true & currentState.users[i].marker === true){
-          nextPhase(currentState)
-        }
-      } else {
-       
-       nextTurn(currentState)
-     }
-}
-
-
-function raise(currentState){
-  
-   var raiser = []
-   var pot = 0
-   
-    for (var i = 0; i < currentState.users.length; i++){
-   
-        if (currentState.users[i].marker == true){
-          currentState.users[i].marker = false;
-
-        }
-        if (currentState.users[i].isActive == true){
-        
-         currentState.users[i].Rmarker = true;
-         raiser = currentState.users[i]
-
-          } 
-       }
-
-         pot = currentState.pot + parseInt(currentState.raiseValue)
-         raiser.stack = raiser.stack - parseInt(currentState.raiseValue)
-         raiser.bet = parseInt(currentState.raiseValue)
-
-        
-       
-
-   		nextTurn(currentState)
-
-}
 
 
 // function fold(currentState){
