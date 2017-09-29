@@ -1,4 +1,4 @@
-let {deal, nextTurn, fold} = require('./actions.js');
+let {deal, nextTurn, fold, reset, firstToAct, checkForNewPhase} = require('./actions.js');
 
 module.exports = function setUpSockets(io){
 
@@ -7,14 +7,13 @@ module.exports = function setUpSockets(io){
 this.state = {
       users: [],
       waitingRoom: [],
-      foldedUsers: [],
       deck : [],
       flop: [],
       turn: [],
       river: [],
       phase: "Game Over",
       pot: 0,
-      fold: [],
+      fold: 0,
       raiseValue: 0,
       hand: 0
     }
@@ -31,6 +30,7 @@ this.state = {
           isActive: true,
           folded: false,
           marker: false,
+          Rmarker: false,
           bet: 0,
           socketID: socket.id
       }
@@ -67,7 +67,11 @@ this.state = {
 	       socket.on("Fold", () => {
 	       	fold(this.state)
 	       	io.emit("newState", this.state)
-	       })
+	       });
+         socket.on("Reset", () => {
+          reset(this.state)
+          io.emit("newState", this.state)
+         });
 
 
 		socket.on("disconnect", () => {
@@ -113,25 +117,33 @@ function call(currentState){
         }
 
     } 
-        
+        // Adds call into pot and matches raisers bet. 
 
         caller.bet = marker.bet
         currentState.pot = currentState.pot + caller.bet
         caller.stack = caller.stack - caller.bet
 
+         
+        for (var i = 0; i < currentState.users[i]; i++){
 
-
-
-          
-         nextTurn(currentState)
+          // if (currentState.users[i] is 1 left of rMarker)
+            NextPhase(currentState)
+          } else {
+            nextTurn()
+          }
 }
 
 
 function check(currentState){
 
-     
-   
+      for (var i = 0; i < currentState.users.length; i++){
+        if(currentState.users[i].isActive === true & currentState.users[i].marker === true){
+          nextPhase(currentState)
+        }
+      } else {
+       
        nextTurn(currentState)
+     }
 }
 
 
@@ -144,10 +156,11 @@ function raise(currentState){
    
         if (currentState.users[i].marker == true){
           currentState.users[i].marker = false;
+
         }
         if (currentState.users[i].isActive == true){
         
-         currentState.users[i].marker = true;
+         currentState.users[i].Rmarker = true;
          raiser = currentState.users[i]
 
           } 
@@ -402,25 +415,28 @@ function raise(currentState){
 
 
 
-  function flop(currentState){
+  // function flop(currentState){
 
        
-       currentState.flop = [this.state.deck.pop(), this.state.deck.pop(), this.state.deck.pop()]
+  //      currentState.flop = [this.state.deck.pop(), this.state.deck.pop(), this.state.deck.pop()]
       
-  }
+  // }
 
-  function turn(currentState){
+  // function turn(currentState){
     
      
-        currentState.turn = [this.state.deck.pop()]
+  //       currentState.turn = [this.state.deck.pop()]
       
     
-  }
+  // }
 
-  function river(currentState){
+  // function river(currentState){
    
      
-        currentState.river = [this.state.deck.pop()]
+  //       currentState.river = [this.state.deck.pop()]
   
-  }
+  // }
+
+
+
 

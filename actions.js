@@ -1,3 +1,28 @@
+
+function flop(currentState){
+
+       
+       currentState.flop = [this.state.deck.pop(), this.state.deck.pop(), this.state.deck.pop()]
+      
+  }
+
+  function turn(currentState){
+    
+     
+        currentState.turn = [this.state.deck.pop()]
+      
+    
+  }
+
+  function river(currentState){
+   
+     
+        currentState.river = [this.state.deck.pop()]
+  
+  }
+
+
+
 // Generates new deck
 
 function generateNewDeck(){
@@ -42,7 +67,130 @@ function generateNewDeck(){
 
 // Game over function that resets everything
 
+function reset(currentState){
+		
+	for (var i = 0; i < currentState.users.length; i++){
+		currentState.users.bet = 0;
+		currentState.users.hand = [];
+		currentState.users.isActive = false;
+		currentState.users.marker = false;
+		currentState.users.position = ""
+	}
+		currentState.pot = 0;
+		currentState.fold = 0;
+		currentState.phase = "Game Over";
+		console.log("hi")
+	}
 
+
+
+
+// How the next phase happens:
+
+// Game Over- Deal handles phase change
+
+// 2 Markers: BBmarker and RMarker
+
+// for all phases:
+
+// On check- BBmarker = new phase
+
+// on Raise = BBmarker = false until next phase. RMarker = true
+
+// Phase change- User left of RMarker calls or folds. 
+
+function activateLeftofDealer(currentState){
+	// find first folded===false player left of dealer and isActive = true
+}
+function setMarker(currentState){
+	activeMarker = 0
+	for (var i = 0; i < currentState.users.length; i++){
+		if(currentState.users[i].isActive === true){
+			activeMarker = i
+		}
+	}
+		currentState.users[activemarker + ].marker = true;
+}
+
+
+function setPhase(currentState){
+	activateLeftofDealer(currentState)
+	setMarker(currentState)
+	for (var i = 0; i < currentState.users.length; i++){
+		currentState.users.bet = 0;
+
+	}
+}
+
+
+function nextPhase(currentState){
+	if(currentState.phase === "turn"){
+		currentState.phase = "river"
+		setPhase(currentState)
+	}
+	if(currentState.phase === "flop"){
+		currentState.phase = "turn"
+		setPhase(currentState)
+	}
+	if (currentState.phase === "preflop"){
+		currentState.phase = "flop"
+		setPhase(currentState)
+	}
+}
+
+
+
+// function checkForNewPhase(currentState){
+	
+// 	var marker = 0;
+// 	var pass = false;
+
+// 	for (var i = 0; i < currentState.users.length; i++) {
+// 			if(currentState.users[i].isActive === true && currentState.users[i].marker === true){
+// 				if (currentState.phase === "preflop"){
+// 				flop(currentState)
+// 				// first to act
+// 				currentState.phase = "flop";
+// 				pass = true;
+// 				} 
+// 			} 
+		
+// 	} 
+
+// 	if (pass === false){
+
+// 	for (var i = 0; i < currentState.users.length; i++) {
+// 			if (currentState.users[i].marker === true){
+// 				marker = i;
+// 			}
+// 		}
+// 		for (var i = 0; i < currentState.users.length; i++) {
+// 			if (currentState.users[marker - 1].isActive === true){
+// 				if (currentState.phase === "turn"){
+// 					river(currentState);
+// 					// first to act
+// 					currentState.phase = "river";
+// 					pass = true;
+// 				}
+// 				if (currentState.phase === "flop"){
+// 					turn(currentState);
+// 					// first to act
+// 					currentState.phase = "turn";
+// 					pass = true;
+// 					}	 
+// 			}
+// 		}
+// 	}
+	
+// 	if (pass === false){
+// 		nextTurn(currentState)
+// 	}
+	
+// }
+
+	
+	
+	
 
 function deal(currentState){
 
@@ -154,30 +302,36 @@ function deal(currentState){
 
 function fold(currentState){
 
-	var index = []
-
-	// Pushes current user into foldedUsers array 
+	
 
 	for (var i = 0; i < currentState.users.length; i++){
 
 		if(currentState.users[i].isActive === true){
-			currentState.foldedUsers.push(currentState.users[i])
-			index = i
+			currentState.users[i].folded = true;
+			currentState.fold += 1
+	
 		}
 	}
-	currentState.users.splice(index, 1)
 	
-	// 
-	if (currentState.users.length === 1){
-		currentState.users[0].stack += currentState.pot
-
-
-		currentState.phase = "Game Over"
+	if(currentState.users.length - currentState.fold === 1){
+		for (var i = 0; i < currentState.users.length; i++) {
+			if (currentState.users[i].folded === false){
+				currentState.users[i].stack += currentState.pot
+			}
+		}
+		
+		reset(currentState)
 		console.log("Hand Over")
 			
 	} else {
+		 for (var i = 0; i < currentState.users[i]; i++){
+
+          // if (currentState.users[i] is 1 left of rMarker)
+            NextPhase(currentState)
+          } else {
+            nextTurn()
+          }
 	
-	nextTurn(currentState)
 	}
 
 }
@@ -193,6 +347,7 @@ function firstToAct(currentState){
 	}
 		currentState.users[newActive + 1].isActive = true;
 }
+
 
 
 // Next Turn:
@@ -211,7 +366,7 @@ function nextTurn(currentState){
 
     for (var i = 0; i < currentState.users.length; i++){
 
-	   if (currentState.users[i].isActive == true){
+	   if (currentState.users[i].isActive === true){
          currentState.users[i].isActive = false 
          
         
@@ -221,14 +376,15 @@ function nextTurn(currentState){
          if (newActive == currentState.users.length){
           newActive = 0;
          }
-    
-    }
+	}
+		while(currentState.users[newActive].folded === true){
+         newActive++
+       }
 
     	currentState.users[newActive].isActive = true
 
 
 }
-
 
 
 
@@ -241,5 +397,8 @@ function nextTurn(currentState){
 module.exports = {
 	deal, 
 	nextTurn,
-	fold
+	fold,
+	reset,
+	firstToAct,
+	checkForNewPhase
 }
