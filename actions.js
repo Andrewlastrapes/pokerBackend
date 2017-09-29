@@ -99,22 +99,48 @@ function reset(currentState){
 
 // Phase change- User left of RMarker calls or folds. 
 
-function activateLeftofDealer(currentState){
-	// find first folded===false player left of dealer and isActive = true
+
+
+
+// Finds and activates non folded user left of dealer.
+
+function activateLeftOfDealer(currentState){
+	var dealerMarker = 0
+
+	for (var i = 0; i < currentState.users.length; i++){
+		if( currentState.users[i].position = “dealer”){
+		    dealerMarker = i 
+		    }
+		}
+
+ 	while(currentState.users[dealerMarker].folded === true){
+    	dealerMarker--
+	}
+
 }
+
+// Sets marker to user furthest to the left of active user. 
+
 function setMarker(currentState){
+	
+
 	activeMarker = 0
 	for (var i = 0; i < currentState.users.length; i++){
 		if(currentState.users[i].isActive === true){
 			activeMarker = i
 		}
 	}
-		currentState.users[activemarker + ].marker = true;
+		if(currentState.users[activeMarker - 1] === -1){
+			currentState.users[currentState.users.length - 1].marker = true;
+		}	else {
+			currentState.users[activeMarker - 1].marker = true;
+		}
 }
 
+// Calls activateLeftOfDealer and setMarker. Resets all user bets
 
 function setPhase(currentState){
-	activateLeftofDealer(currentState)
+	activateLeftOfDealer(currentState)
 	setMarker(currentState)
 	for (var i = 0; i < currentState.users.length; i++){
 		currentState.users.bet = 0;
@@ -122,6 +148,7 @@ function setPhase(currentState){
 	}
 }
 
+// checks and changes current phase.
 
 function nextPhase(currentState){
 	if(currentState.phase === "turn"){
@@ -329,7 +356,7 @@ function fold(currentState){
           // if (currentState.users[i] is 1 left of rMarker)
             NextPhase(currentState)
           } else {
-            nextTurn()
+            nextTurn(currentState)
           }
 	
 	}
