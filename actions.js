@@ -398,11 +398,23 @@ function fold(currentState){
 		console.log("Hand Over")
 			
 	} else {
+
+		// Detect if we're in rMarker or marker mode
+    	if (markerIndex === -1){
+    		var marker = currentState.users[indexRmarker]
+    	} else {
+    		var marker = currentState.users[markerIndex]
+    	}
 		 
-		 if (indexRmarker - folderIndex === 1 || indexRmarker - folderIndex === -(currentState.users.length - 1)){
-            nextPhase(currentState)
+		
+        if(indexRmarker === -1){
+        	nextTurn(currentState)
+        } else {
+
+			 if (indexRmarker - folderIndex === 1 || indexRmarker - folderIndex === -(currentState.users.length - 1)){
+            	nextPhase(currentState)
            } else {
-            nextTurn(currentState)
+            	nextTurn(currentState)
           }
 
 	}
