@@ -1,3 +1,9 @@
+var Hand = require("pokersolver").Hand;
+
+
+
+
+
 
 function flop(currentState){
 
@@ -20,6 +26,19 @@ function flop(currentState){
         currentState.river = [currentState.deck.pop()]
   
   }
+
+
+function handSolver(currentState){
+	var flop = currentState.flop
+	var turn = currentState.turn
+	var river = currentState.river
+	var board = []
+
+	board = flop.concat(turn).concat(river)
+
+	return board
+
+}
 
 
 
@@ -81,6 +100,9 @@ function reset(currentState){
 		currentState.pot = 0;
 		currentState.fold = 0;
 		currentState.phase = "Game Over";
+		currentState.flop = [];
+		currentState.turn = [];
+		currentState.river = [];
 
 		console.log("hi")
 	}
@@ -127,13 +149,14 @@ function setMarker(currentState){
 // Calls activateLeftOfDealer and setMarker. Resets all user bets
 
 function setPhase(currentState){
-	activateLeftOfDealer(currentState)
-	setMarker(currentState)
+
 	for (var i = 0; i < currentState.users.length; i++){
 		currentState.users[i].bet = 0;
 		currentState.users[i].Rmarker = false;
-
+		currentState.users[i].marker = false;
 	}
+	activateLeftOfDealer(currentState)
+	setMarker(currentState)
 }
 
 // checks and changes current phase.
@@ -142,6 +165,7 @@ function nextPhase(currentState){
 	if(currentState.phase === "turn"){
 		currentState.phase = "river"
 		river(currentState)
+		console.log(handSolver(currentState))
 		setPhase(currentState)
 	}
 	else if(currentState.phase === "flop"){
@@ -284,7 +308,7 @@ function raise(currentState){
           } 
        }
 
-         pot = currentState.pot + parseInt(currentState.raiseValue)
+         currentState.pot = currentState.pot + parseInt(currentState.raiseValue)
          raiser.stack = raiser.stack - parseInt(currentState.raiseValue)
          raiser.bet = parseInt(currentState.raiseValue)
 
@@ -372,7 +396,8 @@ function call(currentState){
 function fold(currentState){
 
 	var indexRmarker = 0;
-	var folderIndex = 0
+	var folderIndex = 0;
+	var markerIndex = -1;
 
 	for (var i = 0; i < currentState.users.length; i++){
 
@@ -415,11 +440,12 @@ function fold(currentState){
             	nextPhase(currentState)
            } else {
             	nextTurn(currentState)
-          }
+         	 }
 
+		}	
+
+		}
 	}
-
-}
 
 // Next Turn:
 
