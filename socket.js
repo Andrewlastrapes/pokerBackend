@@ -1,4 +1,4 @@
-let {deal, fold, call, check, raise } = require('./actions.js');
+let {deal, fold, call, check, raise, allIn} = require('./actions.js');
 
 module.exports = function setUpSockets(io){
 
@@ -68,6 +68,11 @@ this.state = {
 	       	fold(this.state)
 	       	io.emit("newState", this.state)
 	       });
+
+         socket.on("allIn", () => {
+          allIn(this.state)
+          io.emit("newState", this.state)
+         });
         
 
 

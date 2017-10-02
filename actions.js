@@ -354,6 +354,33 @@ function raise(currentState){
 
 }
 
+function allIn(currentState){
+
+	// Current Rmarker = false
+	// Current marker = false
+	 for (var i = 0; i < currentState.users.length; i++){
+   
+        if(currentState.users[i].Rmarker === true){
+        	currentState.users[i].Rmarker = false;
+        }
+        if (currentState.users[i].marker === true){
+          currentState.users[i].marker = false;
+      }
+     }
+
+	// Takes all money out of users stack. Puts money into pot. 
+
+	for(var i = 0; i < currentState.users.length; i++){
+		if(currentState.users[i].isActive === true){
+			currentState.users[i].stack = currentState.users[i].stack - currentState.users[i].stack
+			currentState.pot = currentState.users[i].stack + currentState.pot
+			currentState.users[i].Rmarker = true; 
+ 		}
+	}
+	nextTurn(currentState)
+}
+
+
 
 function check(currentState){
 	var activeUserHasMarker = false;
@@ -526,5 +553,6 @@ module.exports = {
 	fold,
 	call,
 	check,
-	raise
+	raise,
+	allIn
 }
