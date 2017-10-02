@@ -125,9 +125,8 @@ function reset(currentState){
 		currentState.users[i].hand = [];
 		currentState.users[i].isActive = false;
 		currentState.users[i].marker = false;
-		currentState.users[i].position = ""
-		currentState.users[i].Rmarker = false
-		currentState.users[i].folded = false
+		currentState.users[i].Rmarker = false;
+		currentState.users[i].folded = false;
 	}
 		currentState.pot = 0;
 		currentState.fold = 0;
@@ -149,7 +148,7 @@ function activateLeftOfDealer(currentState){
 	var dealerMarker = 0
 
 	for (var i = 0; i < currentState.users.length; i++){
-		if( currentState.users[i].position === "Dealer"){
+		if(currentState.users[i].position === "Dealer"){
 		    dealerMarker = i 
 		    }
 		}
