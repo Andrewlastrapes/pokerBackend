@@ -63,7 +63,7 @@ function handSolver(currentState){
 		cards.push(copyBoard[i].number + copyBoard[i].suit[0])
 	}
 
-	
+
 
 	
 	
@@ -237,9 +237,9 @@ function setPositions(currentState){
   	} else {
   		currentState.users[0].position = "Big Blind"
   			if(currentState.users.length > 2){
-  				currentState.users[2] === "Dealer"
+  				currentState.users[currentState.users.length - 2].position = "Dealer"
   			} else {
-  				currentState.users[1] === "Dealer"
+  				currentState.users[1].position = "Dealer"
   			}
   	}
 }
@@ -328,7 +328,11 @@ function raise(currentState){
    
     for (var i = 0; i < currentState.users.length; i++){
    
-        if (currentState.users[i].marker == true){
+        if(currentState.users[i].Rmarker === true){
+        	currentState.users[i].Rmarker = false;
+        }
+
+        if (currentState.users[i].marker === true){
           currentState.users[i].marker = false;
 
         }
@@ -421,9 +425,6 @@ function call(currentState){
 
 
 
-// fold
-
-// folded array- pops folded users into new array
 
 function fold(currentState){
 
@@ -482,8 +483,6 @@ function fold(currentState){
 // Next Turn:
 
 // Needs to activate next user
-
-// Change phase - sets first to act on each new phase. Another function?
 
 
 function nextTurn(currentState){
