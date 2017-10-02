@@ -33,10 +33,42 @@ function handSolver(currentState){
 	var turn = currentState.turn
 	var river = currentState.river
 	var board = []
+	var cards = []
+
 
 	board = flop.concat(turn).concat(river)
 
-	return board
+	var copyBoard = Object.assign({}, board);
+
+
+
+	for(var i = 0; i < copyBoard.length; i++){
+		if (copyBoard[i].number === 14){
+			copyBoard[i].number ="A"
+		}
+		if (copyBoard[i].number === 13){
+			copyBoard[i].number ="K"
+		}
+		if (copyBoard[i].number === 12){
+			copyBoard[i].number ="Q"
+		}
+		if (copyBoard[i].number === 11){
+			copyBoard[i].number ="J"
+		}
+	}
+		
+	console.log(copyBoard)
+
+	for(var i = 0; i < copyBoard.length; i++){
+		cards.push(copyBoard[i].number + copyBoard[i].suit[0])
+	}
+
+	
+
+	
+	
+	
+	
 
 }
 
