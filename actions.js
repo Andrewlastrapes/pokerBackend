@@ -461,14 +461,6 @@ function call(currentState){
        var callerIndex = 0
        var active = []
 
-       // Checks active users for line 501.
-
-       for(var i = 0; i < currentState.users.length; i++){
-       		if(currentState.users[i].folded === false){
-       			active.push(currentState.users[i])
-       		}
-       }
-
 
 
       for (var i = 0; i < currentState.users.length; i++){
@@ -484,7 +476,17 @@ function call(currentState){
           indexRmarker = i;
         }
 
-    } 
+    }
+
+
+
+       // Checks active users for line 501.
+
+       for(var i = 0; i < currentState.users.length; i++){
+       		if(currentState.users[i].folded === false){
+       			active.push(currentState.users[i])
+       		}
+       } 
     	// Detect if we're in rMarker or marker mode
     	if (markerIndex === -1){
     		var marker = currentState.users[indexRmarker]
@@ -507,10 +509,6 @@ function call(currentState){
 	          if (indexRmarker - callerIndex === 1 || indexRmarker - callerIndex === -(active.length - 1)){
 	            nextPhase(currentState)
 	           } else {
-	           	console.log("indexRmarker: " + indexRmarker)
-	           	console.log("callerIndex :" + callerIndex)
-	           	console.log(currentState.users.length)
-
 	            nextTurn(currentState)
 	          }
 	         }
@@ -528,14 +526,6 @@ function fold(currentState){
 	var active = []
 
 
-	// checks active users for line 577
-
-	  for(var i = 0; i < currentState.users.length; i++){
-       		if(currentState.users[i].folded === false){
-       			active.push(currentState.users[i])
-       		}
-       }
-
 
 	for (var i = 0; i < currentState.users.length; i++){
 
@@ -545,10 +535,24 @@ function fold(currentState){
 			folderIndex = i
 	
 		}
+		if (currentState.users[i].marker === true){
+          markerIndex = i
+        }
 		if(currentState.users[i].Rmarker === true){
           indexRmarker = i;
         }
 	}
+
+	// checks active users for line 577
+
+	  for(var i = 0; i < currentState.users.length; i++){
+       		if(currentState.users[i].folded === false){
+       			active.push(currentState.users[i])
+
+       		}
+       }
+       console.log(active)
+       
 	
 	if(currentState.users.length - currentState.fold === 1){
 		for (var i = 0; i < currentState.users.length; i++) {
