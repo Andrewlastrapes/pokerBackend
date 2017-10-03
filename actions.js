@@ -73,19 +73,17 @@ function handSolver(currentState){
 	var finalSeven = []
 	var solveHand = []
 
-
-	
-
-
 	board = flop.concat(turn).concat(river)
 	board = convertCardNumberToLetter(board);
 
+	
 	for (var i = 0; i < currentState.users.length; i++){
 		if (currentState.users[i].folded === false){
+			
 			finalHands.push(currentState.users[i]);
 		}
-
 	}
+	console.log(finalHands)
 
 	for(var i = 0; i < finalHands.length; i++){
 		usersHands.push(convertCardNumberToLetter(finalHands[i].hand))
@@ -102,9 +100,11 @@ function handSolver(currentState){
 
 	}
 
-	var winner = Hand.winners(solveHand)
-	console.log(winner)
 	
+
+	var winner = Hand.winners(solveHand)
+	
+	return winner
 	
 	
 	
@@ -246,7 +246,6 @@ function nextPhase(currentState){
 	if(currentState.phase === "turn"){
 		currentState.phase = "river"
 		river(currentState)
-		console.log(handSolver(currentState))
 		setPhase(currentState)
 	}
 	else if(currentState.phase === "flop"){
@@ -258,6 +257,11 @@ function nextPhase(currentState){
 		currentState.phase = "flop"
 		flop(currentState)
 		setPhase(currentState)
+	}
+	else if(currentState.phase === "river"){
+		console.log(handSolver(currentState))
+
+		// hand winner logic. Add winners stack and pot
 	}
 }
 
@@ -581,7 +585,11 @@ function nextTurn(currentState){
           newActive = 0;
          }
 	}
-		while(currentState.users[newActive].folded === true || currentState.users[newActive].stack === currentState.users[newActive].bet){
+
+
+
+		while(currentState.users[newActive].folded === true){
+			// || currentState.users[newActive].stack === currentState.users[newActive].bet){
          newActive++ 
        }
 
