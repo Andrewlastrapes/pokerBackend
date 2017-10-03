@@ -27,18 +27,15 @@ function flop(currentState){
   
   }
 
+  function convertCardNumberToLetter(cardsArray){
 
-function handSolver(currentState){
-	var flop = currentState.flop
-	var turn = currentState.turn
-	var river = currentState.river
-	var board = []
-	var cards = []
+  	var copyBoard = []
+  	var cards = []
 
-
-	board = flop.concat(turn).concat(river)
-
-	var copyBoard = Object.assign({}, board);
+  	for (var i = 0; i < cardsArray.length; i++){
+		var card = Object.assign({}, cardsArray[i])
+		copyBoard.push(card)
+	}
 
 
 
@@ -57,14 +54,56 @@ function handSolver(currentState){
 		}
 	}
 		
-	console.log(copyBoard)
+	
 
 	for(var i = 0; i < copyBoard.length; i++){
 		cards.push(copyBoard[i].number + copyBoard[i].suit[0])
 	}
+		return cards
+  }
 
 
+function handSolver(currentState){
+	var flop = currentState.flop
+	var turn = currentState.turn
+	var river = currentState.river
+	var board = []
+	var finalHands = []
+	var usersHands = []
+	var finalSeven = []
+	var solveHand = []
 
+
+	
+
+
+	board = flop.concat(turn).concat(river)
+	board = convertCardNumberToLetter(board);
+
+	for (var i = 0; i < currentState.users.length; i++){
+		if (currentState.users[i].folded === false){
+			finalHands.push(currentState.users[i]);
+		}
+
+	}
+
+	for(var i = 0; i < finalHands.length; i++){
+		usersHands.push(convertCardNumberToLetter(finalHands[i].hand))
+	}
+
+	for(var i = 0; i < usersHands.length; i++){
+		finalSeven.push(usersHands[i].concat(board))
+	}
+	
+
+	
+	for (var i = 0; i < finalSeven.length; i++){
+		solveHand.push(Hand.solve(finalSeven[i]))
+
+	}
+
+	var winner = Hand.winners(solveHand)
+	console.log(winner)
 	
 	
 	
@@ -145,17 +184,28 @@ function reset(currentState){
 // Finds and activates non folded user left of dealer.
 
 function activateLeftOfDealer(currentState){
-	var dealerMarker = 0
+	var leftOfDealerMarker = 0
+
+
+	for (var i = 0; i < currentState.users.length; i++){
+		if(currentState.users[i].isActive === true){
+			currentState.users[i].isActive = false;
+		}
+	}
+	  
 
 	for (var i = 0; i < currentState.users.length; i++){
 		if(currentState.users[i].position === "Dealer"){
-		    dealerMarker = i 
+		    leftOfDealerMarker = (i + 1) % currentState.users.length
 		    }
-		}
+		   }
 
- 	while(currentState.users[dealerMarker].folded === true){
-    	dealerMarker--
+ 	console.log(leftOfDealerMarker)
+ 	while(currentState.users[leftOfDealerMarker].folded === true){
+    	leftOfDealerMarker = (leftOfDealerMarker + 1) % currentState.users.length
+    	console.log(leftOfDealerMarker)
 	}
+	currentState.users[leftOfDealerMarker].isActive = true
 
 }
 
@@ -531,8 +581,8 @@ function nextTurn(currentState){
           newActive = 0;
          }
 	}
-		while(currentState.users[newActive].folded === true){
-         newActive++
+		while(currentState.users[newActive].folded === true || currentState.users[newActive].stack === currentState.users[newActive].bet){
+         newActive++ 
        }
 
     	currentState.users[newActive].isActive = true
