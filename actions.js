@@ -459,6 +459,15 @@ function call(currentState){
        var markerIndex = -1
        var caller = 0
        var callerIndex = 0
+       var active = []
+
+       // Checks active users for line 501.
+
+       for(var i = 0; i < currentState.users.length; i++){
+       		if(currentState.users[i].folded === false){
+       			active.push(currentState.users[i])
+       		}
+       }
 
 
 
@@ -493,10 +502,15 @@ function call(currentState){
 
         if(indexRmarker === -1){
         	nextTurn(currentState)
+
         } else{
-	          if (indexRmarker - callerIndex === 1 || indexRmarker - callerIndex === -(currentState.users.length - 1)){
+	          if (indexRmarker - callerIndex === 1 || indexRmarker - callerIndex === -(active.length - 1)){
 	            nextPhase(currentState)
 	           } else {
+	           	console.log("indexRmarker: " + indexRmarker)
+	           	console.log("callerIndex :" + callerIndex)
+	           	console.log(currentState.users.length)
+
 	            nextTurn(currentState)
 	          }
 	         }
@@ -511,6 +525,17 @@ function fold(currentState){
 	var indexRmarker = 0;
 	var folderIndex = 0;
 	var markerIndex = -1;
+	var active = []
+
+
+	// checks active users for line 577
+
+	  for(var i = 0; i < currentState.users.length; i++){
+       		if(currentState.users[i].folded === false){
+       			active.push(currentState.users[i])
+       		}
+       }
+
 
 	for (var i = 0; i < currentState.users.length; i++){
 
@@ -549,7 +574,7 @@ function fold(currentState){
         	nextTurn(currentState)
         } else {
 
-			 if (indexRmarker - folderIndex === 1 || indexRmarker - folderIndex === -(currentState.users.length - 1)){
+			 if (indexRmarker - folderIndex === 1 || indexRmarker - folderIndex === -(active.length - 1)){
             	nextPhase(currentState)
            } else {
             	nextTurn(currentState)
