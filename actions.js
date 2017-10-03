@@ -200,10 +200,10 @@ function activateLeftOfDealer(currentState){
 		    }
 		   }
 
- 	console.log(leftOfDealerMarker)
+ 
  	while(currentState.users[leftOfDealerMarker].folded === true){
     	leftOfDealerMarker = (leftOfDealerMarker + 1) % currentState.users.length
-    	console.log(leftOfDealerMarker)
+    	
 	}
 	currentState.users[leftOfDealerMarker].isActive = true
 
@@ -215,14 +215,21 @@ function setMarker(currentState){
 	
 
 	activeMarker = 0
+
+	
 	for (var i = 0; i < currentState.users.length; i++){
 		if(currentState.users[i].isActive === true){
-			activeMarker = i
+			
+			activeMarker = i - 1
+
 		}
 	}
-		if(activeMarker - 1 === -1){
-			currentState.users[currentState.users.length - 1].marker = true;
-		}	else {
+
+
+
+	if(activeMarker - 1 === -1){
+		currentState.users[currentState.users.length - 1].marker = true;
+	}	else {
 			currentState.users[activeMarker - 1].marker = true;
 		}
 }
@@ -520,8 +527,8 @@ function call(currentState){
 
 function fold(currentState){
 
-	var indexRmarker = 0;
-	var folderIndex = 0;
+	var indexRmarker = -1;
+	var folderIndex = -1;
 	var markerIndex = -1;
 	var active = []
 
@@ -551,7 +558,7 @@ function fold(currentState){
 
        		}
        }
-       console.log(active)
+     
        
 	
 	if(currentState.users.length - currentState.fold === 1){
@@ -566,25 +573,31 @@ function fold(currentState){
 			
 	} else {
 
+		
 		// Detect if we're in rMarker or marker mode
     	if (markerIndex === -1){
     		var marker = currentState.users[indexRmarker]
     	} else {
     		var marker = currentState.users[markerIndex]
+
     	}
-		 
+		
 		
         if(indexRmarker === -1){
         	nextTurn(currentState)
-        } else {
 
-			 if (indexRmarker - folderIndex === 1 || indexRmarker - folderIndex === -(active.length - 1)){
-            	nextPhase(currentState)
-           } else {
+        	} else {
+        	nextTurn(currentState)
+        	for (var i = 0; i < currentState.users.length; i++){
+        		if(currentState.users[i].rMarker === true && currentState.users[i].isActive === true){
+        			nextPhase(currentState)
+        		} else {
             	nextTurn(currentState)
-         	 }
-
-		}	
+			 // if (indexRmarker - folderIndex === 1 || (indexRmarker - folderIndex === -(active.length - 1) && active.length === 2)){
+    //         	nextPhase(currentState)
+           		} 
+       		}
+          	}	
 
 		}
 	}
