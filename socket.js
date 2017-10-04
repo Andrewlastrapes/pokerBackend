@@ -1,4 +1,4 @@
-let {deal, fold, call, check, raise, allIn} = require('./actions.js');
+let {deal, fold, call, check, raise} = require('./actions.js');
 
 module.exports = function setUpSockets(io){
 
@@ -32,6 +32,7 @@ this.state = {
           marker: false,
           Rmarker: false,
           bet: 0,
+          totalBetThisHand: 0,
           socketID: socket.id
       }
       if (this.state.phase === "Game Over" && this.state.users.length < 8){
@@ -69,10 +70,10 @@ this.state = {
 	       	io.emit("newState", this.state)
 	       });
 
-         socket.on("allIn", () => {
-          allIn(this.state)
-          io.emit("newState", this.state)
-         });
+         // socket.on("allIn", () => {
+         //  allIn(this.state)
+         //  io.emit("newState", this.state)
+         // });
         
 
 

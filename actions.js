@@ -63,54 +63,99 @@ function flop(currentState){
   }
 
 
-function handSolver(currentState){
+function handSolver(currentState, users){
 	var flop = currentState.flop
 	var turn = currentState.turn
 	var river = currentState.river
 	var board = []
-	var finalHands = []
-	var usersHands = []
-	var finalSeven = []
-	var solveHand = []
+	var solvedHands = []
+	var finalWinners = []
 
 	board = flop.concat(turn).concat(river)
 	board = convertCardNumberToLetter(board);
 
 	
-	for (var i = 0; i < currentState.users.length; i++){
-		if (currentState.users[i].folded === false){
-			
-			finalHands.push(currentState.users[i]);
-		}
-	}
-	console.log(finalHands)
 
-	for(var i = 0; i < finalHands.length; i++){
-		usersHands.push(convertCardNumberToLetter(finalHands[i].hand))
-	}
 
-	for(var i = 0; i < usersHands.length; i++){
-		finalSeven.push(usersHands[i].concat(board))
-	}
-	
-
-	
-	for (var i = 0; i < finalSeven.length; i++){
-		solveHand.push(Hand.solve(finalSeven[i]))
+	for(var i = 0; i < users.length; i++){
+		var compiledHand = convertCardNumberToLetter(users[i].hand).concat(board)
+		var hand = Hand.solve(compiledHand)
+		hand.index = i
+		solvedHands.push(hand)
 
 	}
 
-	
+	var winners = Hand.winners(solvedHands)
 
-	var winner = Hand.winners(solveHand)
+	for (var i = 0; i < winners.length; i++){
+		finalWinners.push(users[winners[i].index])
+	}
 	
-	return winner
 	
+	return finalWinners
+	
+	// Given this array of users: return only an array of users who have won
 	
 	
 
 }
 
+function payOutWinners(users, payout){
+	var amount = payout/users.length
+	for (var i = 0; users.length; i++){
+		users[i].stack += amount
+	}
+}
+
+function resolveWinner(currentState){
+
+	var activeUsers = []
+	var totalBets = []
+	var numContributersToEachBet = []
+	var totalBetsCopy = []
+
+
+	for (var i = 0; i < currentState.users.length; i++){
+		if(currentState.users[i].folded === false){
+			activeUsers.push(currentState.users[i])
+		}
+	}
+
+	for (var i = 0; i < currentState.users.length; i++) {
+		
+		if(!totalBets.includes(currentState.users[i].totalBetThisHand)){
+			totalBets.push(currentState.users[i].totalBetThisHand)
+			totalBetsCopy.push(currentState.users[i].totalBetThisHand)
+		} 
+	}
+	totalBets.sort()
+	totalBetsCopy.sort()
+	for (var i = 0; i < totalBets.length; i++){
+		var hasContributed = currentState.users.filter(function(user){
+			return user.totalBetThisHand >= totalBets[i]
+		})
+		numContributersToEachBet.push(hasContributed.length)
+	}
+
+	while(totalBets.length > 0){
+		var smallestPot = totalBets.shift()
+		var smallestPotCopy = totalBetsCopy.shift()
+		for(var i = 0; i < totalBets.length; i++){
+			totalBets[i] -= smallestPot
+		}
+		var numContributed = numContributersToEachBet.shift();
+		var eligibleUsers = activeUsers.filter(function(user){
+			return user.totalBetThisHand >= smallestPotCopy
+		})
+		var winners	= handSolver(eligibleUsers)
+		var payout = numContributed * smallestPot
+		payoutWinners(winners, payout)
+	}
+
+
+
+
+}
 
 
 // Generates new deck
@@ -166,6 +211,7 @@ function reset(currentState){
 		currentState.users[i].marker = false;
 		currentState.users[i].Rmarker = false;
 		currentState.users[i].folded = false;
+		currentState.users[i].totalBetThisHand = 0;
 	}
 		currentState.pot = 0;
 		currentState.fold = 0;
@@ -219,19 +265,32 @@ function setMarker(currentState){
 	
 	for (var i = 0; i < currentState.users.length; i++){
 		if(currentState.users[i].isActive === true){
-			
 			activeMarker = i - 1
-
+			console.log(activeMarker)
+			if(activeMarker < 0){
+				activeMarker = currentState.users.length - 1
+			}
 		}
 	}
 
+		
 
-
-	if(activeMarker - 1 === -1){
-		currentState.users[currentState.users.length - 1].marker = true;
-	}	else {
-			currentState.users[activeMarker - 1].marker = true;
+		while(currentState.users[activeMarker].folded === true){
+			
+			activeMarker--
+			if(activeMarker < 0){
+				activeMarker = currentState.users.length - 1
+			}
 		}
+
+		currentState.users[activeMarker].marker = true
+
+
+	// if(activeMarker - 1 === -1){
+	// 	currentState.users[currentState.users.length - 1].marker = true;
+	// }	else {
+	// 		currentState.users[activeMarker - 1].marker = true;
+	// 	}
 }
 
 // Calls activateLeftOfDealer and setMarker. Resets all user bets
@@ -371,9 +430,11 @@ function deal(currentState){
 			}
 			currentState.users[i].stack -= 1
 			currentState.users[i].bet += 1
+			currentState.users[i].totalBetThisHand = 1
 			currentState.pot += 1
 			currentState.users[smallBlind].stack -= .50
 			currentState.users[smallBlind].bet += .50
+			currentState.users[smallBlind].totalBetThisHand = .50
 			currentState.pot += .50
 		} 
 
@@ -404,9 +465,10 @@ function raise(currentState){
           } 
        }
 
-         currentState.pot = currentState.pot + parseInt(currentState.raiseValue)
-         raiser.stack = raiser.stack - parseInt(currentState.raiseValue)
-         raiser.bet = parseInt(currentState.raiseValue)
+         currentState.pot = currentState.pot + parseFloat(currentState.raiseValue)
+         raiser.stack = raiser.stack - parseFloateInt(currentState.raiseValue)
+         raiser.bet = parseFloat(currentState.raiseValue)
+         raiser.totalBetThisHand += parseFloat(currentState.raiseValue)
 
         
        
@@ -415,31 +477,31 @@ function raise(currentState){
 
 }
 
-function allIn(currentState){
+// function allIn(currentState){
 
-	// Current Rmarker = false
-	// Current marker = false
-	 for (var i = 0; i < currentState.users.length; i++){
+// 	// Current Rmarker = false
+// 	// Current marker = false
+// 	 for (var i = 0; i < currentState.users.length; i++){
    
-        if(currentState.users[i].Rmarker === true){
-        	currentState.users[i].Rmarker = false;
-        }
-        if (currentState.users[i].marker === true){
-          currentState.users[i].marker = false;
-      }
-     }
+//         if(currentState.users[i].Rmarker === true){
+//         	currentState.users[i].Rmarker = false;
+//         }
+//         if (currentState.users[i].marker === true){
+//           currentState.users[i].marker = false;
+//       }
+//      }
 
-	// Takes all money out of users stack. Puts money into pot. 
+// 	// Takes all money out of users stack. Puts money into pot. 
 
-	for(var i = 0; i < currentState.users.length; i++){
-		if(currentState.users[i].isActive === true){
-			currentState.users[i].stack = currentState.users[i].stack - currentState.users[i].stack
-			currentState.pot = currentState.users[i].stack + currentState.pot
-			currentState.users[i].Rmarker = true; 
- 		}
-	}
-	nextTurn(currentState)
-}
+// 	for(var i = 0; i < currentState.users.length; i++){
+// 		if(currentState.users[i].isActive === true){
+// 			currentState.pot = currentState.users[i].stack + currentState.pot
+// 			currentState.users[i].stack = 0;
+// 			currentState.users[i].Rmarker = true; 
+//  		}
+// 	}
+// 	nextTurn(currentState)
+// }
 
 
 
@@ -460,13 +522,15 @@ function check(currentState){
 
 
 
+
+
 function call(currentState){
 
        var indexRmarker = -1
        var markerIndex = -1
        var caller = 0
-       var callerIndex = 0
-       var active = []
+       
+      
 
 
 
@@ -477,7 +541,7 @@ function call(currentState){
         }
         if(currentState.users[i].isActive === true){
           caller = currentState.users[i]
-          callerIndex = i
+     
         }
         if(currentState.users[i].Rmarker === true){
           indexRmarker = i;
@@ -494,10 +558,19 @@ function call(currentState){
     	}
         // Adds call into pot and matches raisers bet. 
 
-        
-        currentState.pot += marker.bet - caller.bet
-        caller.stack -= marker.bet - caller.bet
-        caller.bet = marker.bet
+        if(caller.stack < marker.bet){
+        	currentState.pot += caller.stack
+	        caller.totalBetThisHand += caller.stack
+	        caller.bet = caller.stack
+	        caller.stack = 0
+	        
+        } else {
+	        currentState.pot += marker.bet - caller.bet
+	        caller.stack -= marker.bet - caller.bet
+	        caller.totalBetThisHand += marker.bet - caller.bet 
+	        caller.bet = marker.bet
+
+    	  }
 
 
         nextTurn(currentState)
@@ -639,6 +712,9 @@ function nextTurn(currentState){
 		while(currentState.users[newActive].folded === true){
 			// || currentState.users[newActive].stack === currentState.users[newActive].bet){
          newActive++ 
+         if(newActive === currentState.users.length){
+         	newActive = 0;
+         }
        }
 
     	currentState.users[newActive].isActive = true
@@ -659,6 +735,6 @@ module.exports = {
 	fold,
 	call,
 	check,
-	raise,
-	allIn
+	raise
+	
 }
