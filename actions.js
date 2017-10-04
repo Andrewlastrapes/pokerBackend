@@ -486,14 +486,6 @@ function call(currentState){
     }
 
 
-
-       // Checks active users for line 501.
-
-       for(var i = 0; i < currentState.users.length; i++){
-       		if(currentState.users[i].folded === false){
-       			active.push(currentState.users[i])
-       		}
-       } 
     	// Detect if we're in rMarker or marker mode
     	if (markerIndex === -1){
     		var marker = currentState.users[indexRmarker]
@@ -506,19 +498,16 @@ function call(currentState){
         currentState.pot += marker.bet - caller.bet
         caller.stack -= marker.bet - caller.bet
         caller.bet = marker.bet
-       
-    
 
-        if(indexRmarker === -1){
-        	nextTurn(currentState)
 
-        } else{
-	          if (indexRmarker - callerIndex === 1 || indexRmarker - callerIndex === -(active.length - 1)){
-	            nextPhase(currentState)
-	           } else {
-	            nextTurn(currentState)
-	          }
-	         }
+        nextTurn(currentState)
+		for (var i = 0; i < currentState.users.length; i++){
+			if (currentState.users[i].isActive === true && currentState.users[i].Rmarker === true){
+				nextPhase(currentState)
+			}
+		}    	
+
+  	
 }
 
 
@@ -542,22 +531,23 @@ function fold(currentState){
 			folderIndex = i
 	
 		}
-		if (currentState.users[i].marker === true){
-          markerIndex = i
-        }
-		if(currentState.users[i].Rmarker === true){
-          indexRmarker = i;
-        }
 	}
+	// 	if (currentState.users[i].marker === true){
+ //          markerIndex = i
+ //        }
+	// 	if(currentState.users[i].Rmarker === true){
+ //          indexRmarker = i;
+ //        }
+	// }
 
 	// checks active users for line 577
 
-	  for(var i = 0; i < currentState.users.length; i++){
-       		if(currentState.users[i].folded === false){
-       			active.push(currentState.users[i])
+	  // for(var i = 0; i < currentState.users.length; i++){
+   //     		if(currentState.users[i].folded === false){
+   //     			active.push(currentState.users[i])
 
-       		}
-       }
+   //     		}
+   //     }
      
        
 	
@@ -572,35 +562,51 @@ function fold(currentState){
 		console.log("Hand Over")
 			
 	} else {
+		nextTurn(currentState)
+		for (var i = 0; i < currentState.users.length; i++){
+			if (currentState.users[i].isActive === true && currentState.users[i].Rmarker === true){
+				nextPhase(currentState)
+			}
+		}
+
+	}	
+
+
+}
+
+
+
+
+	// else {
 
 		
 		// Detect if we're in rMarker or marker mode
-    	if (markerIndex === -1){
-    		var marker = currentState.users[indexRmarker]
-    	} else {
-    		var marker = currentState.users[markerIndex]
+    	// if (markerIndex === -1){
+    	// 	var marker = currentState.users[indexRmarker]
+    	// } else {
+    	// 	var marker = currentState.users[markerIndex]
 
-    	}
+    	// }
 		
 		
-        if(indexRmarker === -1){
-        	nextTurn(currentState)
+        // if(indexRmarker === -1){
+        // 	nextTurn(currentState)
 
-        	} else {
-        	nextTurn(currentState)
-        	for (var i = 0; i < currentState.users.length; i++){
-        		if(currentState.users[i].rMarker === true && currentState.users[i].isActive === true){
-        			nextPhase(currentState)
-        		} else {
-            	nextTurn(currentState)
+        // 	} else {
+        // 	nextTurn(currentState)
+        // 	for (var i = 0; i < currentState.users.length; i++){
+        // 		if(currentState.users[i].rMarker === true && currentState.users[i].isActive === true){
+        // 			nextPhase(currentState)
+        // 		} else {
+        //     	nextTurn(currentState)
 			 // if (indexRmarker - folderIndex === 1 || (indexRmarker - folderIndex === -(active.length - 1) && active.length === 2)){
     //         	nextPhase(currentState)
-           		} 
-       		}
-          	}	
+ //           		} 
+ //       		}
+ //          	}	
 
-		}
-	}
+	// 	}
+	// }
 
 // Next Turn:
 
