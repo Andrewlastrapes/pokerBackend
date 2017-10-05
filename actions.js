@@ -91,20 +91,19 @@ function handSolver(currentState, users){
 		finalWinners.push(users[winners[i].index])
 	}
 	
-	
+	console.log(finalWinners)
 	return finalWinners
-	
-	// Given this array of users: return only an array of users who have won
-	
 	
 
 }
 
 function payOutWinners(users, payout){
 	var amount = payout/users.length
-	for (var i = 0; users.length; i++){
+	for (var i = 0; i < users.length; i++){
 		users[i].stack += amount
+		console.log(users[i].username + " has won " + payout)
 	}
+	
 }
 
 function resolveWinner(currentState){
@@ -147,9 +146,9 @@ function resolveWinner(currentState){
 		var eligibleUsers = activeUsers.filter(function(user){
 			return user.totalBetThisHand >= smallestPotCopy
 		})
-		var winners	= handSolver(eligibleUsers)
+		var winners	= handSolver(currentState, eligibleUsers)
 		var payout = numContributed * smallestPot
-		payoutWinners(winners, payout)
+		payOutWinners(winners, payout)
 	}
 
 
@@ -200,6 +199,14 @@ function generateNewDeck(){
 
 }
 
+// Winner alert message
+
+// function winnerAlert(currentState, winner){
+// 	alert(winner "has won ")
+
+// }
+
+
 // Game over function that resets everything
 
 function reset(currentState){
@@ -220,7 +227,12 @@ function reset(currentState){
 		currentState.turn = [];
 		currentState.river = [];
 
-		console.log("hi")
+		for (var i = 0; i < currentState.users.length; i++){
+			if(currentState.users[i].stack === 0){
+				alert("Buy more chips?")
+			}
+			// Prompt yes or no? Remove user from array if yes. 
+		}
 	}
 
 
@@ -266,7 +278,6 @@ function setMarker(currentState){
 	for (var i = 0; i < currentState.users.length; i++){
 		if(currentState.users[i].isActive === true){
 			activeMarker = i - 1
-			console.log(activeMarker)
 			if(activeMarker < 0){
 				activeMarker = currentState.users.length - 1
 			}
@@ -284,14 +295,8 @@ function setMarker(currentState){
 		}
 
 		currentState.users[activeMarker].marker = true
-
-
-	// if(activeMarker - 1 === -1){
-	// 	currentState.users[currentState.users.length - 1].marker = true;
-	// }	else {
-	// 		currentState.users[activeMarker - 1].marker = true;
-	// 	}
 }
+
 
 // Calls activateLeftOfDealer and setMarker. Resets all user bets
 
@@ -325,7 +330,8 @@ function nextPhase(currentState){
 		setPhase(currentState)
 	}
 	else if(currentState.phase === "river"){
-		console.log(handSolver(currentState))
+		resolveWinner(currentState)
+		reset(currentState)
 
 		// hand winner logic. Add winners stack and pot
 	}
@@ -466,7 +472,7 @@ function raise(currentState){
        }
 
          currentState.pot = currentState.pot + parseFloat(currentState.raiseValue)
-         raiser.stack = raiser.stack - parseFloateInt(currentState.raiseValue)
+         raiser.stack = raiser.stack - parseFloat(currentState.raiseValue)
          raiser.bet = parseFloat(currentState.raiseValue)
          raiser.totalBetThisHand += parseFloat(currentState.raiseValue)
 
@@ -477,31 +483,6 @@ function raise(currentState){
 
 }
 
-// function allIn(currentState){
-
-// 	// Current Rmarker = false
-// 	// Current marker = false
-// 	 for (var i = 0; i < currentState.users.length; i++){
-   
-//         if(currentState.users[i].Rmarker === true){
-//         	currentState.users[i].Rmarker = false;
-//         }
-//         if (currentState.users[i].marker === true){
-//           currentState.users[i].marker = false;
-//       }
-//      }
-
-// 	// Takes all money out of users stack. Puts money into pot. 
-
-// 	for(var i = 0; i < currentState.users.length; i++){
-// 		if(currentState.users[i].isActive === true){
-// 			currentState.pot = currentState.users[i].stack + currentState.pot
-// 			currentState.users[i].stack = 0;
-// 			currentState.users[i].Rmarker = true; 
-//  		}
-// 	}
-// 	nextTurn(currentState)
-// }
 
 
 
@@ -605,32 +586,16 @@ function fold(currentState){
 	
 		}
 	}
-	// 	if (currentState.users[i].marker === true){
- //          markerIndex = i
- //        }
-	// 	if(currentState.users[i].Rmarker === true){
- //          indexRmarker = i;
- //        }
-	// }
-
-	// checks active users for line 577
-
-	  // for(var i = 0; i < currentState.users.length; i++){
-   //     		if(currentState.users[i].folded === false){
-   //     			active.push(currentState.users[i])
-
-   //     		}
-   //     }
-     
        
 	
 	if(currentState.users.length - currentState.fold === 1){
 		for (var i = 0; i < currentState.users.length; i++) {
 			if (currentState.users[i].folded === false){
 				currentState.users[i].stack += currentState.pot
+				console.log(currentState.users[i].username + " has won " + currentState.pot)
 			}
 		}
-		
+
 		reset(currentState)
 		console.log("Hand Over")
 			
@@ -649,41 +614,7 @@ function fold(currentState){
 
 
 
-
-	// else {
-
-		
-		// Detect if we're in rMarker or marker mode
-    	// if (markerIndex === -1){
-    	// 	var marker = currentState.users[indexRmarker]
-    	// } else {
-    	// 	var marker = currentState.users[markerIndex]
-
-    	// }
-		
-		
-        // if(indexRmarker === -1){
-        // 	nextTurn(currentState)
-
-        // 	} else {
-        // 	nextTurn(currentState)
-        // 	for (var i = 0; i < currentState.users.length; i++){
-        // 		if(currentState.users[i].rMarker === true && currentState.users[i].isActive === true){
-        // 			nextPhase(currentState)
-        // 		} else {
-        //     	nextTurn(currentState)
-			 // if (indexRmarker - folderIndex === 1 || (indexRmarker - folderIndex === -(active.length - 1) && active.length === 2)){
-    //         	nextPhase(currentState)
- //           		} 
- //       		}
- //          	}	
-
-	// 	}
-	// }
-
-// Next Turn:
-
-// Needs to activate next user
+// Activates next user
 
 
 function nextTurn(currentState){
@@ -708,13 +639,20 @@ function nextTurn(currentState){
 	}
 
 
+		var counter = 0
 
-		while(currentState.users[newActive].folded === true){
-			// || currentState.users[newActive].stack === currentState.users[newActive].bet){
-         newActive++ 
-         if(newActive === currentState.users.length){
-         	newActive = 0;
+		while(currentState.users[newActive].folded === true || currentState.users[newActive].stack === currentState.users[newActive].bet){
+         	newActive++ 
+         	counter++ 
+        	if(newActive === currentState.users.length){
+         		newActive = 0;
          }
+         	if(counter > 8){
+         		while(currentState.phase != "Game Over"){
+         			nextPhase(currentState)
+         		}
+         		return
+         	}
        }
 
     	currentState.users[newActive].isActive = true
