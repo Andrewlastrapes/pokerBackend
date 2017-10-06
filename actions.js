@@ -597,7 +597,7 @@ function fold(currentState){
 		}
 
 		reset(currentState)
-		console.log("Hand Over")
+		
 			
 	} else {
 		nextTurn(currentState)
