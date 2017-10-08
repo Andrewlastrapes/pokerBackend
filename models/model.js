@@ -9,7 +9,7 @@ var Schema = mongoose.Schema;
 
 
 var schema = new Schema({
-	username: { type: String, required: true },
+	username: { type: String, required: true, unique: true },
 	password: { type: String, required: true },
 	money: { type: Number, required: true }
 
@@ -17,7 +17,7 @@ var schema = new Schema({
 
 
 
-var User = module.export = mongoose.model("Accounts", schema);
+var User = module.exports = mongoose.model("User", schema);
 
 
 module.exports.createUser = function(newUser, callback){
@@ -32,6 +32,10 @@ module.exports.createUser = function(newUser, callback){
 module.exports.getUserByUsername = function(username, callback){
 	var query = {username: username};
 	User.findOne(query, callback);
+}
+
+module.exports.getUserById = function(id, callback){
+	User.findById(id, callback);
 }
 
 module.exports.comparePassword = function(candidatePassword, hash, callback){

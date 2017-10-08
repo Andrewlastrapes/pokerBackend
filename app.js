@@ -15,7 +15,7 @@ var session = require("express-session");
 
 
 
-
+var db = mongoose.connection;
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -42,6 +42,24 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(expressValidator({
+  errorFormatter: function(param, msg, value) {
+      var namespace = param.split('.')
+      , root    = namespace.shift()
+      , formParam = root;
+
+    while(namespace.length) {
+      formParam += '[' + namespace.shift() + ']';
+    }
+    return {
+      param : formParam,
+      msg   : msg,
+      value : value
+    };
+  }
+}));
+
 
 
 app.use(flash());

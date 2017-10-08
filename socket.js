@@ -70,10 +70,7 @@ this.state = {
 	       	io.emit("newState", this.state)
 	       });
 
-         // socket.on("allIn", () => {
-         //  allIn(this.state)
-         //  io.emit("newState", this.state)
-         // });
+      
         
 
 

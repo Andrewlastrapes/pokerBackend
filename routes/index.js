@@ -11,13 +11,11 @@ router.get('/', function(req, res, next) {
   res.render('layout', { title: 'Express' });
 });
 
-router.get("/register", function(req, res, next){
+router.get("/register", function(req, res){
 	res.render("register");
 })
 
-router.post('/login', function(req, res, next) {
-	res.redirect("navbar2")
-})
+
 
 
 
@@ -47,7 +45,7 @@ router.get('/sportslines', function(req, res, next) {
 })
 
 
-router.post('/register', function(req, res, next) {
+router.post('/register', function(req, res) {
 		
 	var username = req.body.username
 	var password = req.body.password
@@ -76,7 +74,6 @@ router.post('/register', function(req, res, next) {
 			if(err) throw err;
 			console.log(user);
 		});
-
 
 
 	req.flash("success_msg", "You are registered and can now login");
@@ -113,6 +110,21 @@ passport.deserializeUser(function(id, done) {
     done(err, user);
   });
 });
+
+router.post('/login',
+  passport.authenticate('local', {successRedirect:'navbar2', failureRedirect:'/views/login',failureFlash: true}),
+  function(req, res) {
+    res.redirect('navbar2');
+  });
+
+router.get('/logout', function(req, res){
+	req.logout();
+
+	req.flash('success_msg', 'You are logged out');
+
+	res.redirect('navbar2');
+});
+
 
 
 

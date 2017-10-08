@@ -91,18 +91,22 @@ function handSolver(currentState, users){
 		finalWinners.push(users[winners[i].index])
 	}
 	
-	console.log(finalWinners)
+
 	return finalWinners
 	
 
 }
 
 function payOutWinners(users, payout){
+	var usernames = []
 	var amount = payout/users.length
 	for (var i = 0; i < users.length; i++){
 		users[i].stack += amount
 		console.log(users[i].username + " has won " + payout)
+		usernames.push(users[i].username)
 	}
+	console.log(usernames)
+	return usernames
 	
 }
 
@@ -229,7 +233,7 @@ function reset(currentState){
 
 		for (var i = 0; i < currentState.users.length; i++){
 			if(currentState.users[i].stack === 0){
-				alert("Buy more chips?")
+				console.log(currentState.users[i].username + " Buy more chips?")
 			}
 			// Prompt yes or no? Remove user from array if yes. 
 		}
