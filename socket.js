@@ -15,12 +15,14 @@ this.state = {
       pot: 0,
       fold: 0,
       raiseValue: 0,
-      hand: 0
+      hand: 0,
+      winners: []
     }
   
 
 	io.on('connection', (socket) => {
 		console.log("Someone connected")
+    socket.emit("socket id", socket.id)
 			var newUser = {
          username : "User",
           clock : Date(),

@@ -153,6 +153,7 @@ function resolveWinner(currentState){
 		var winners	= handSolver(currentState, eligibleUsers)
 		var payout = numContributed * smallestPot
 		payOutWinners(winners, payout)
+		currentState.winners.push(winners)
 	}
 
 
