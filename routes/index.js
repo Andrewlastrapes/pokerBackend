@@ -2,6 +2,10 @@ var express = require('express');
 var router = express.Router();
 var passport = require("passport");
 var LocalStrategy = require("passport-local").Strategy;
+var http = require("http");
+var axios = require("axios");
+
+
 
 
 var User = require('../models/model');
@@ -43,6 +47,23 @@ router.get('/navbar2', function(req, res, next) {
 router.get('/sportslines', function(req, res, next) {
 	res.render("sportslines")
 })
+
+router.get("/nfl", function(req, res, next){
+	console.log("asdjkhfads")
+	var options = {
+		url: "https://jsonodds.com/api/odds/nfl",
+		method: "GET", 
+		headers: {
+			"JsonOdds-API-Key": "b8d96367-e88a-4f9d-aa5d-f270fab35c2c"
+		}
+	}
+	
+	axios(options).then(function(response){
+		res.send(response.data)
+	});
+	
+
+});
 
 
 router.post('/register', function(req, res) {

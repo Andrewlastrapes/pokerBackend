@@ -9,7 +9,8 @@ function flop(currentState){
 
        
        currentState.flop = [currentState.deck.pop(), currentState.deck.pop(), currentState.deck.pop()]
-      
+
+       
   }
 
   function turn(currentState){
@@ -24,6 +25,8 @@ function flop(currentState){
    
      
         currentState.river = [currentState.deck.pop()]
+
+      
   
   }
 
@@ -174,19 +177,23 @@ function generateNewDeck(){
   for (var i = 2; i < 15; i++ ){
     hearts.push({
       number : i,
-      suit: "hearts"
+      suit: "hearts",
+      onBoard: false
     })
     spades.push({
       number : i,
-      suit: "spades"
+      suit: "spades",
+      onBoard: false
     })
     diamonds.push({
       number : i,
-      suit: "diamonds"
+      suit: "diamonds",
+      onBoard: false
     })
     clubs.push({
       number : i,
-      suit: "clubs"
+      suit: "clubs",
+      onBoard: false
     })  
   }
 
@@ -588,6 +595,7 @@ function fold(currentState){
 			currentState.users[i].folded = true;
 			currentState.fold += 1
 			folderIndex = i
+			currentState.users[i].hand = []
 	
 		}
 	}

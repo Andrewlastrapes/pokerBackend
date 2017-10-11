@@ -6,6 +6,8 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "ajax-request": "^1.2.3",
+    "axios": "^0.16.2",
     "bcrypt": "^1.0.3",
     "bluebird": "^3.5.1",
     "body-parser": "~1.17.1",
