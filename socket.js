@@ -20,7 +20,7 @@ this.state = {
     }
   
 
-	io.on('connection', (socket) => {
+	io.on('connection', (socket) => { 
 		console.log("Someone connected")
     socket.emit("socket id", socket.id)
 			var newUser = {
