@@ -1,0 +1,288 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, 
+blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/*GLOBAL*/
+
+html,
+body {
+	width: 728px;
+  height: 90px;
+  margin: 0;
+}
+
+.loader-container {
+	display: table;
+  width: 726px;
+  height: 88px;
+  text-align: center; 
+  border: 1px solid #ddd;
+  position: absolute;
+}
+
+.loader {
+	display: table-cell; 
+	vertical-align: middle;
+}
+
+.click-tag {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 728px;
+	height: 90px;
+	cursor: pointer;
+	z-index: 100;
+}
+
+/* UTILITY */
+
+.container {
+	position: relative;
+}
+
+.absolute {
+	position: absolute;
+}
+
+
+/* AD STYLES */
+
+.banner {
+	width: 726px;
+	height: 88px;
+	border: 1px solid #000;
+	overflow: hidden;
+	background-color: #fff;
+background-size: contain;
+position: absolute;
+opacity: 1;
+}
+
+.bg {
+	width: 728px;
+	height: 90px;
+background: url('images/728x90_Store_Closure_FF20_100517_bg.jpg') no-repeat;
+background-size: contain;
+overflow: hidden;
+opacity: 1;
+}
+
+.f1_text1 {
+width: 417px;
+height: 46px;
+top: 20px;
+left: 155px;
+background: url('images/728x90_Store_Closure_FF20_100517_f1_text1.svg') no-repeat;
+	background-size: contain;
+	position: absolute;
+	opacity: 0;
+}
+
+.f2_text1 {
+width: 225px;
+height: 24px;
+top: 15px;
+left: 50px;
+background: url('images/728x90_Store_Closure_FF20_100517_f2_text1.png') no-repeat;
+background-size: contain;
+	position: absolute;
+	opacity: 0;
+}
+
+.f2_text2 {
+width: 231px;
+height: 26px;
+top: 16px;
+left: 282px;
+background: url('images/728x90_Store_Closure_FF20_100517_f2_text2.png') no-repeat;
+background-size: contain;
+position: absolute;
+opacity: 0;
+}
+
+.f2_text3 {
+width: 315px;
+height: 26px;
+top: 49px;
+left: 51px;
+background: url('images/728x90_Store_Closure_FF20_100517_f2_text3.png') no-repeat;
+background-size: contain;
+position: absolute;
+opacity: 0;
+}
+
+.line {
+	width: 2px;
+height: 67px;
+bottom: 11px;
+	right: 159px;
+	background-color: rgb(255, 255, 255);
+	background-color: rgba(255, 255, 255, 0.5);
+	background-size: contain;
+	position: absolute;
+	opacity: 0;
+}
+
+.logo {
+width: 134px;
+height: 20px;
+bottom: 53px;
+right: 10px;
+	background: url('images/logo.svg') no-repeat;
+	background-size: contain;
+	position: absolute;
+	opacity: 0;
+}
+
+.cta{
+	right: 10px;
+bottom: 16px;
+width: 138px;
+height: 30px;
+	background-color: #592245;
+	position: absolute;
+	opacity: 0;
+}
+
+.cta_txt {
+	width: 75px;
+	height: 10px;
+	bottom: 9px;
+	right: 31px;
+	background: url('images/728x90_Store_Closure_FF20_100517_cta.png') no-repeat;
+	background-size: contain;
+	position: absolute;
+	opacity: 1;
+}
+
+.brands {
+width: 548px;
+height: 76px;
+top: 6px;
+left: 6px;
+	background-color: #fff;
+background-size: contain;
+position: absolute;
+opacity: 0;
+}
+
+.brand1 {
+width: 113px;
+height: 26px;
+top: 23px;
+left: 17px;
+background: url('images/728x90_Store_Closure_FF20_100517_brand1.png') no-repeat;
+background-size: contain;
+position: absolute;
+opacity: 0;
+}
+.brand2 {
+width: 139px;
+height: 16px;
+top: 31px;
+left: 156px;
+background: url('images/728x90_Store_Closure_FF20_100517_brand2.png') no-repeat;
+background-size: contain;
+position: absolute;
+opacity: 0;
+}
+.brand3 {
+width: 100px;
+height: 20px;
+top: 28px;
+left: 318px;
+background: url('images/728x90_Store_Closure_FF20_100517_brand3.png') no-repeat;
+background-size: contain;
+position: absolute;
+opacity: 0;
+}
+
+.brand4 {
+width: 85px;
+height: 34px;
+top: 23px;
+left: 446px;
+background: url('images/728x90_Store_Closure_FF20_100517_brand4.png') no-repeat;
+background-size: contain;
+position: absolute;
+opacity: 0;
+}
+
+.fn_text1 {
+width: 522px;
+height: 75px;
+top: 13px;
+left: 20px;
+background: url('images/728x90_Store_Closure_FF20_100517_fn_text1.png') no-repeat;
+background-size: contain;
+position: absolute;
+opacity: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<!-- saved from url=(0085)https://s0.2mdn.net/4089046/1506694891879/728x90_Store_Closure_FF20_100517/index.html -->
+<html lang="en-us"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  	
+    <title>Kohls - 728x90 </title>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="ad.size" content="width=728,height=90 ">
+    <link rel="stylesheet" href="./style.css">
+  <script type="text/javascript">
+    
+      (function() {
+        var relegateNavigation = '';
+        var handleClickTagMessage = function(e) {
+          try {
+            var eventData = JSON.parse(e.data);
+          } catch (err) {
+            return;
+          }
+          if (eventData.isInitClickTag) {
+            if (eventData.clickTags) {
+              for (var i = 0; i < eventData.clickTags.length; i++) {
+                var clkTag = eventData.clickTags[i];
+                window[clkTag.name] = clkTag.url;
+              }
+            } else if (eventData.clickTag) {
+              window.clickTag = eventData.clickTag;
+            }
+            relegateNavigation = eventData.relegateNavigation;
+          }
+        };
+
+        if (open.call) {
+          window.open = function(open) {
+            return function(url, name, features) {
+              if (relegateNavigation === 'parent') {
+                var message = {'clickTag': url, 'isPostClickTag': true};
+                parent.postMessage(JSON.stringify(message), '*');
+              } else {
+                var args = [url, name];
+                if (features) {
+                  args.push(features);
+                }
+                open.apply(window, args);
+              }
+            };
+          }(window.open);
+        }
+
+        if (window.addEventListener) {
+          window.addEventListener(
+              'message', handleClickTagMessage, false);
+        } else {
+          window.attachEvent('onmessage', handleClickTagMessage);
+        }
+      })();
+    
+  </script></head>
+  <body>
+  	<div class="container">
+      <!-- LOADER START -->
+  		<div class="loader-container absolute">
+  			<div class="loader">
+  				<!--?xml version="1.0" encoding="UTF-8" standalone="no" ?--><svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.0" width="31px" height="31px" viewBox="0 0 128 128" xml:space="preserve"><script type="text/ecmascript" xlink:href="//preloaders.net/jscripts/smil.user.js"></script><g transform="rotate(315 64 64)"><circle cx="16" cy="64" r="16" fill="#000"></circle><circle cx="16" cy="64" r="16" fill="#555" transform="rotate(45,64,64)"></circle><circle cx="16" cy="64" r="16" fill="#949494 " transform="rotate(90,64,64)"></circle><circle cx="16" cy="64" r="16" fill="#ccc" transform="rotate(135,64,64)"></circle><circle cx="16" cy="64" r="16" fill="#e1e1e1 " transform="rotate(180,64,64)"></circle><circle cx="16" cy="64" r="16" fill="#e1e1e1 " transform="rotate(225,64,64)"></circle><circle cx="16" cy="64" r="16" fill="#e1e1e1 " transform="rotate(270,64,64)"></circle><circle cx="16" cy="64" r="16" fill="#e1e1e1 " transform="rotate(315,64,64)"></circle><animatetransform attributeName="transform" type="rotate" values="0 64 64;315 64 64;270 64 64;225 64 64;180 64 64;135 64 64;90 64 64;45 64 64" calcMode="discrete" dur="720ms" repeatCount="indefinite"></animatetransform></g></svg>
+  			</div>
+  		</div>
+      <!-- LOADER END -->
+
+      <!-- BANNER START -->
+  		<div class="banner" style="display: block;">
+        <div class="bg"></div>
+  			<div class="f1_text1" style="opacity: 0;"></div>
+        <div class="f2_text1" style="opacity: 0;"></div>
+        <div class="f2_text2" style="opacity: 0;"></div>
+        <div class="f2_text3" style="opacity: 0;"></div>
+        <div class="brands" style="opacity: 0;">
+          <div class="brand1" style="opacity: 1;"></div>
+          <div class="brand2" style="opacity: 1;"></div>
+          <div class="brand3" style="opacity: 1;"></div>
+          <div class="brand4" style="opacity: 1;"></div>
+        </div>
+        <div class="fn_text1" style="opacity: 1;"></div>
+        <div class="footer">
+          <div class="line" style="opacity: 1;"></div>
+          <div class="logo" style="opacity: 1;"></div>
+             <div class="cta" style="opacity: 1;">
+            <div class="cta_txt"></div>
+          </div>
+        </div>
+  		</div>
+      <!-- BANNER END -->
+
+      <!-- CLICKTAG START -->
+      <div class="click-tag"></div>
+      <!-- CLICKTAG END -->
+    </div>
+    <script>var clickTag = "https://www.kohls.com/";</script>
+    <script src="./TweenMax.min.js"></script>
+    <script src="./main(1).js"></script>
+  
+</body></html>
