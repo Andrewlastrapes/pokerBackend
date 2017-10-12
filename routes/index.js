@@ -48,10 +48,35 @@ router.get('/sportslines', function(req, res, next) {
 	res.render("sportslines")
 })
 
+router.get("/NFLlines", function(req, res, next){
+	res.render("NFLlines")
+})
+
+router.get("/CollegeFootballLines", function(req, res, next){
+	res.render("CollegeFootballLines")
+})
+
 router.get("/nfl", function(req, res, next){
-	console.log("asdjkhfads")
+	
 	var options = {
 		url: "https://jsonodds.com/api/odds/nfl",
+		method: "GET", 
+		headers: {
+			"JsonOdds-API-Key": "b8d96367-e88a-4f9d-aa5d-f270fab35c2c"
+		}
+	}
+	
+	axios(options).then(function(response){
+		res.send(response.data)
+	});
+	
+
+});
+
+router.get("/CollegeFootball", function(req, res, next){
+	
+	var options = {
+		url: "https://jsonodds.com/api/odds/NCAAF",
 		method: "GET", 
 		headers: {
 			"JsonOdds-API-Key": "b8d96367-e88a-4f9d-aa5d-f270fab35c2c"
