@@ -251,6 +251,8 @@ function reset(currentState){
 
 
 
+
+
 // Finds and activates non folded user left of dealer.
 
 function activateLeftOfDealer(currentState){
@@ -343,7 +345,9 @@ function nextPhase(currentState){
 	}
 	else if(currentState.phase === "river"){
 		resolveWinner(currentState)
-		reset(currentState)
+		setTimeout(function(){
+			console.log("Hetyyy")
+			reset(currentState)}, 5000)
 
 		// hand winner logic. Add winners stack and pot
 	}
@@ -653,13 +657,47 @@ function nextTurn(currentState){
 
 
 		var counter = 0
+		var AllInAndFoldCounter = 0
+		console.log(AllInAndFoldCounter)
 
 		while(currentState.users[newActive].folded === true || currentState.users[newActive].stack === currentState.users[newActive].bet){
+         	AllInAndFoldCounter++
          	newActive++ 
          	counter++ 
+         	console.log(AllInAndFoldCounter + "hiiiiiiii")
+        	
         	if(newActive === currentState.users.length){
          		newActive = 0;
          }
+
+         	// All in initiation 
+         	
+         	if(AllInAndFoldCounter === currentState.users.length){
+         		if (currentState.phase === "preflop"){
+         			setTimeout(function(){
+         				flop(currentState)}, 2000);
+         			setTimeout(function(){
+         				turn(currentState)}, 2000)
+         			setTimeout(function(){
+         				river(currentState)}, 2000)
+         			
+
+         		}
+         		else if(currentState.phase === "flop"){
+         			setTimeout(function(){
+         				turn(currentState)}, 2000)
+         			setTimeout(function(){
+         				river(currentState)}, 2000)
+
+         		}
+         		else if(currentState.phase === "turn"){
+         			setTimeout(function(){
+         				river(currentState)}, 2000)
+         		}
+         	}
+
+         	
+
          	if(counter > 8){
          		while(currentState.phase != "Game Over"){
          			nextPhase(currentState)

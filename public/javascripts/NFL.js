@@ -13,14 +13,15 @@ $.ajax({
 
 	for (var i = 0; i < NFL.length; i++){
 
-	$(".Games").append(NFL[i].AwayTeam + " @ " + NFL[i].HomeTeam + "<br>")
-	$(".Games").append(NFL[i].HomeTeam + ": " + NFL[i].Odds[0].PointSpreadHome + "<br>")
-	$(".Games").append(NFL[i].AwayTeam + ": " + NFL[i].Odds[0].PointSpreadAway + "<br>")
-	$(".Games").append("Over/Under: " + NFL[i].Odds[0].TotalNumber + "<br>")
-	$(".Games").append(NFL[i].HomeTeam + " Money Line: " + NFL[i].Odds[0].MoneyLineHome+ "<br>")
-	$(".Games").append(NFL[i].AwayTeam + " Money Line: " +NFL[i].Odds[0].MoneyLineAway+ "<br>" + "<br>" + "<br>" + "<br>")
+		$(".Games").append(NFL[i].AwayTeam + " @ " + NFL[i].HomeTeam + "<br>")
+		$(".Games").append(NFL[i].HomeTeam + ": " + NFL[i].Odds[0].PointSpreadHome + "<br>")
+		$(".Games").append(NFL[i].AwayTeam + ": " + NFL[i].Odds[0].PointSpreadAway + "<br>")
+		$(".Games").append("Over/Under: " + NFL[i].Odds[0].TotalNumber + "<br>")
+		$(".Games").append(NFL[i].HomeTeam + " Money Line: " + NFL[i].Odds[0].MoneyLineHome+ "<br>")
+		$(".Games").append(NFL[i].AwayTeam + " Money Line: " +NFL[i].Odds[0].MoneyLineAway+ "<br>" + "<br>" + "<br>" + "<br>")
 
 
+	
 
 }
 })
