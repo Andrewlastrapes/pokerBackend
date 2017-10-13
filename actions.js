@@ -222,6 +222,18 @@ function generateNewDeck(){
 // Game over function that resets everything
 
 function reset(currentState){
+
+	// Remove busted players
+	
+	
+	
+	// for (var i = 0; i < currentState.users.length; i++){
+	// 	if(currentState.users[i].stack === 0){
+	// 		currentState.users[i].splice(i , 1)
+	// 	}
+	// }
+
+
 		
 	for (var i = 0; i < currentState.users.length; i++){
 		currentState.users[i].bet = 0;
@@ -345,11 +357,8 @@ function nextPhase(currentState){
 	}
 	else if(currentState.phase === "river"){
 		resolveWinner(currentState)
-		setTimeout(function(){
-			console.log("Hetyyy")
-			reset(currentState)}, 5000)
-
-		// hand winner logic. Add winners stack and pot
+		// Winner message
+		reset(currentState)
 	}
 }
 
@@ -555,6 +564,15 @@ function call(currentState){
     	}
         // Adds call into pot and matches raisers bet. 
 
+         var AllInAndFoldCounter = 0
+   		  
+    	for (var i = 0; i < currentState.users.length; i++){
+    		if(currentState.users[i].folded === true || currentState.users[i].stack === 0){
+    				AllInAndFoldCounter++
+    		}
+    	}
+
+
         if(caller.stack < marker.bet){
         	currentState.pot += caller.stack
 	        caller.totalBetThisHand += caller.stack
@@ -569,15 +587,24 @@ function call(currentState){
 
     	  }
 
+    	 
+    		console.log(AllInAndFoldCounter)
+    		if (currentState.users.length - 1 <= AllInAndFoldCounter){
+    			return true;
+    		} 
+         		
+
+
+   
 
         nextTurn(currentState)
 		for (var i = 0; i < currentState.users.length; i++){
 			if (currentState.users[i].isActive === true && currentState.users[i].Rmarker === true){
 				nextPhase(currentState)
 			}
-		}    	
+		}  
+		return false; 
 
-  	
 }
 
 
@@ -609,11 +636,13 @@ function fold(currentState){
 		for (var i = 0; i < currentState.users.length; i++) {
 			if (currentState.users[i].folded === false){
 				currentState.users[i].stack += currentState.pot
-				console.log(currentState.users[i].username + " has won " + currentState.pot)
+				// winner message
+				
 			}
 		}
-
-		reset(currentState)
+		console.log(currentState.users[i].username + " has won " + currentState.pot)
+		setTimeout(function(){
+			reset(currentState)}, 3000)
 		
 			
 	} else {
@@ -655,55 +684,18 @@ function nextTurn(currentState){
          }
 	}
 
-
-		var counter = 0
-		var AllInAndFoldCounter = 0
-		console.log(AllInAndFoldCounter)
+		
 
 		while(currentState.users[newActive].folded === true || currentState.users[newActive].stack === currentState.users[newActive].bet){
-         	AllInAndFoldCounter++
+       
          	newActive++ 
-         	counter++ 
-         	console.log(AllInAndFoldCounter + "hiiiiiiii")
+         	
+   
         	
         	if(newActive === currentState.users.length){
          		newActive = 0;
          }
 
-         	// All in initiation 
-         	
-         	if(AllInAndFoldCounter === currentState.users.length){
-         		if (currentState.phase === "preflop"){
-         			setTimeout(function(){
-         				flop(currentState)}, 2000);
-         			setTimeout(function(){
-         				turn(currentState)}, 2000)
-         			setTimeout(function(){
-         				river(currentState)}, 2000)
-         			
-
-         		}
-         		else if(currentState.phase === "flop"){
-         			setTimeout(function(){
-         				turn(currentState)}, 2000)
-         			setTimeout(function(){
-         				river(currentState)}, 2000)
-
-         		}
-         		else if(currentState.phase === "turn"){
-         			setTimeout(function(){
-         				river(currentState)}, 2000)
-         		}
-         	}
-
-         	
-
-         	if(counter > 8){
-         		while(currentState.phase != "Game Over"){
-         			nextPhase(currentState)
-         		}
-         		return
-         	}
        }
 
     	currentState.users[newActive].isActive = true
@@ -724,6 +716,7 @@ module.exports = {
 	fold,
 	call,
 	check,
-	raise
+	raise,
+	nextPhase
 	
 }

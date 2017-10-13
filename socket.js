@@ -1,4 +1,4 @@
-let {deal, fold, call, check, raise} = require('./actions.js');
+let {deal, fold, call, check, raise, nextPhase} = require('./actions.js');
 
 module.exports = function setUpSockets(io){
 
@@ -58,8 +58,43 @@ this.state = {
 		});
 
 	      socket.on("Call", () => {
-	    	call(this.state)
-	    	io.emit("newState", this.state)
+	    	
+        var time = 1
+        var AllIn = call(this.state)
+        
+        if (AllIn === false){
+          console.log("False")
+          io.emit("newState", this.state)
+        } else {
+            console.log("True")
+            var numOfTimesToLoop = 0
+
+            if(this.state.phase === "preflop"){
+              numOfTimesToLoop = 4
+            } 
+            else if (this.state.phase === "flop"){
+              numOfTimesToLoop = 3
+            }
+
+            else if(this.state.phase === "turn"){
+              numOfTimesToLoop = 2
+            }
+
+            else if(this.state.phase === "river"){
+              numOfTimesToLoop = 1
+            }
+
+            for (var i = 1; i <= numOfTimesToLoop; i++){
+              setTimeout( () => {
+                nextPhase(this.state)
+                io.emit("newState", this.state)
+              }, 2000 * numOfTimesToLoop)
+            }
+          }
+          
+	    	
+        
+
 		});
 
 	       socket.on("Check", () => {
@@ -68,9 +103,38 @@ this.state = {
 		});
 
 	       socket.on("Fold", () => {
-	       	fold(this.state)
-	       	io.emit("newState", this.state)
-	       });
+
+          var time = 1
+          var AllIn = fold(this.state)
+	       	if (AllIn === false){
+            io.emit("newState", this.state)
+          } else {
+            console.log("True")
+            var numOfTimesToLoop = 0
+
+            if(this.state.phase === "preflop"){
+              numOfTimesToLoop = 4
+            } 
+            else if (this.state.phase === "flop"){
+              numOfTimesToLoop = 3
+            }
+
+            else if(this.state.phase === "turn"){
+              numOfTimesToLoop = 2
+            }
+
+            else if(this.state.phase === "river"){
+              numOfTimesToLoop = 1
+            }
+
+            for (var i = 1; i <= numOfTimesToLoop; i++){
+              setTimeout( () => {
+                nextPhase(this.state)
+                io.emit("newState", this.state)
+              }, 2000 * numOfTimesToLoop)
+            }
+          }
+        });
 
       
         
