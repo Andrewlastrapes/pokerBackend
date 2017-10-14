@@ -1,9 +1,8 @@
 .Header {
 	text-align: center;
 	font-family: 'Graduate', cursive;
-	
-
 }
+
 
 h1 {
 	font-weight: 900;
@@ -12,8 +11,9 @@ h1 {
 }
 
 
-.Games {
 
+.Games {
+	
 	text-align: center;
 	font-family: 'Graduate', cursive;
 	font-size: 25px;

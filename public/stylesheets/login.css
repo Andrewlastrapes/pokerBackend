@@ -20,4 +20,15 @@ body, html {
   box-shadow: 0 0 1em #222;
   border-radius: 2px;
 
+
+}
+
+h1 {
+  color: #102542;
+
+}
+
+label {
+  color: #102542;
+
 }
