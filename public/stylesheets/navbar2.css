@@ -6,3 +6,15 @@ h1 {
 	font-size: 80px;
 }
 
+
+@media screen and (max-width: 614px){ 
+
+	body, html {
+	height: 100%;
+}
+
+h1 {
+	font-size: 40px;
+}
+
+	}
