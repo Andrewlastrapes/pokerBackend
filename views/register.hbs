@@ -1,11 +1,15 @@
 
 <link rel="stylesheet" type="text/css" href="stylesheets/register.css">
 
+
+
 {{#if errors}}
       {{#each errors}}
         <div class="alert alert-danger">{{msg}}</div>
       {{/each}}
 {{/if}}
+
+{{> navbar}}
 
 <div class="page">
   <div class="container box">

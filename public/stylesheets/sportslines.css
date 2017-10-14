@@ -1,3 +1,15 @@
+
+body {
+	background-color: #48483A;;
+}
+
+
 .main {
-	background-color: black;
+	
+	padding-top: 50px;
+}
+
+.second {
+	padding-top: 50px;
+	color: #DFF8EB;
 }

@@ -16,7 +16,8 @@ this.state = {
       fold: 0,
       raiseValue: 0,
       hand: 0,
-      winners: []
+      winners: [],
+      handNumber : 0
     }
   
 

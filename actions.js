@@ -398,6 +398,9 @@ function setPositions(currentState){
 function deal(currentState){
 
 	// Pushes waiting room users into users array 
+
+	currentState.handNumber++
+	console.log("handNumber = " + currentState.handNumber)
 	
 	for (var i = 0; i < currentState.waitingRoom.length; i++){
 		if(currentState.users.length < 8){
@@ -637,12 +640,14 @@ function fold(currentState){
 			if (currentState.users[i].folded === false){
 				currentState.users[i].stack += currentState.pot
 				// winner message
-				
+
 			}
+			console.log(currentState.users[i].username + " has won " + currentState.pot)
+		
+			reset(currentState)
+				
 		}
-		console.log(currentState.users[i].username + " has won " + currentState.pot)
-		setTimeout(function(){
-			reset(currentState)}, 3000)
+	
 		
 			
 	} else {
@@ -652,7 +657,7 @@ function fold(currentState){
 				nextPhase(currentState)
 			}
 		}
-
+		return false; 
 	}	
 
 
