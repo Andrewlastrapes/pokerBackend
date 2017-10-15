@@ -223,15 +223,6 @@ function generateNewDeck(){
 
 function reset(currentState){
 
-	// Remove busted players
-	
-	
-	
-	// for (var i = 0; i < currentState.users.length; i++){
-	// 	if(currentState.users[i].stack === 0){
-	// 		currentState.users[i].splice(i , 1)
-	// 	}
-	// }
 
 
 		
@@ -251,15 +242,8 @@ function reset(currentState){
 		currentState.turn = [];
 		currentState.river = [];
 
-		for (var i = 0; i < currentState.users.length; i++){
-			if(currentState.users[i].stack === 0){
-				console.log(currentState.users[i].username + " Buy more chips?")
-			}
-			// Prompt yes or no? Remove user from array if yes. 
-		}
-	}
-
-
+	
+}
 
 
 
@@ -401,6 +385,24 @@ function deal(currentState){
 
 	currentState.handNumber++
 	console.log("handNumber = " + currentState.handNumber)
+
+		
+	// Remove busted players 
+
+
+	var busted = []
+
+	for (var i = 0; i < currentState.users.length; i++){
+		if(currentState.users[i].stack === 0){
+			busted.push(i)
+		}
+			
+	}
+	for (var i = 0; busted.length; i++){
+			currentState.users.splice(busted[i], 1)
+		}
+
+
 	
 	for (var i = 0; i < currentState.waitingRoom.length; i++){
 		if(currentState.users.length < 8){
