@@ -386,7 +386,7 @@ function deal(currentState){
 	currentState.handNumber++
 	console.log("handNumber = " + currentState.handNumber)
 
-		
+
 	// Remove busted players 
 
 
@@ -396,8 +396,12 @@ function deal(currentState){
 		if(currentState.users[i].stack === 0){
 			busted.push(i)
 		}
+
 			
 	}
+
+	console.log(busted)
+
 	for (var i = 0; busted.length; i++){
 			currentState.users.splice(busted[i], 1)
 		}
@@ -650,20 +654,31 @@ function fold(currentState){
 			return false
 				
 		}
-	
-		
-			
+
 	} else {
-		nextTurn(currentState)
-		for (var i = 0; i < currentState.users.length; i++){
-			if (currentState.users[i].isActive === true && currentState.users[i].Rmarker === true){
-				nextPhase(currentState)
+		 
+		var AllInAndFoldCounter = 0
+   		  
+    	for (var i = 0; i < currentState.users.length; i++){
+    		if(currentState.users[i].folded === true || currentState.users[i].stack === 0){
+    				AllInAndFoldCounter++
+    		}
+    	}
+
+    	if (currentState.users.length - 1 <= AllInAndFoldCounter){
+    			return true;
+    		} else {
+				nextTurn(currentState)
+				for (var i = 0; i < currentState.users.length; i++){
+					if (currentState.users[i].isActive === true && currentState.users[i].Rmarker === true){
+						nextPhase(currentState)
+					}
 			}
-		}
 		return false; 
-	}	
+		}	
 
 
+	}
 }
 
 

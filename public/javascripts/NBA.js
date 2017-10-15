@@ -16,7 +16,6 @@ $.ajax({
 		$(".Games").append(NBA[i].AwayTeam + " @ " + NBA[i].HomeTeam + "<br>")
 		$(".Games").append(NBA[i].HomeTeam + ": " + NBA[i].Odds[0].PointSpreadHome + "<br>")
 		$(".Games").append(NBA[i].AwayTeam + ": " + NBA[i].Odds[0].PointSpreadAway + "<br>")
-		$(".Games").append("Over/Under: " + NBA[i].Odds[0].TotalNumber + "<br>")
 		$(".Games").append(NBA[i].HomeTeam + " Money Line: " + NBA[i].Odds[0].MoneyLineHome+ "<br>")
 		$(".Games").append(NBA[i].AwayTeam + " Money Line: " +NBA[i].Odds[0].MoneyLineAway+ "<br>" + "<br>" + "<br>" + "<br>")
 
