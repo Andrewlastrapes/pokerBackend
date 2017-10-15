@@ -645,6 +645,7 @@ function fold(currentState){
 			console.log(currentState.users[i].username + " has won " + currentState.pot)
 		
 			reset(currentState)
+			return false
 				
 		}
 	
