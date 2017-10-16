@@ -177,23 +177,23 @@ function generateNewDeck(){
   for (var i = 2; i < 15; i++ ){
     hearts.push({
       number : i,
-      suit: "hearts",
-      onBoard: false
+      suit: "hearts"
+     
     })
     spades.push({
       number : i,
-      suit: "spades",
-      onBoard: false
+      suit: "spades"
+    
     })
     diamonds.push({
       number : i,
-      suit: "diamonds",
-      onBoard: false
+      suit: "diamonds"
+     
     })
     clubs.push({
       number : i,
-      suit: "clubs",
-      onBoard: false
+      suit: "clubs"
+    
     })  
   }
 
@@ -211,12 +211,6 @@ function generateNewDeck(){
 
 }
 
-// Winner alert message
-
-// function winnerAlert(currentState, winner){
-// 	alert(winner "has won ")
-
-// }
 
 
 // Game over function that resets everything
