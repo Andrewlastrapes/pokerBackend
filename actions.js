@@ -578,6 +578,7 @@ function call(currentState){
     	for (var i = 0; i < currentState.users.length; i++){
     		if(currentState.users[i].folded === true || currentState.users[i].stack === 0){
     				AllInAndFoldCounter++
+    				console.log(AllInAndFoldCounter + "for call")
     		}
     	}
 
@@ -644,16 +645,17 @@ function fold(currentState){
 	if(currentState.users.length - currentState.fold === 1){
 		for (var i = 0; i < currentState.users.length; i++) {
 			if (currentState.users[i].folded === false){
+				console.log("User wins stack")
 				currentState.users[i].stack += currentState.pot
-				// winner message
+				console.log(currentState.users[i].username + " has won " + currentState.pot)
+				
 
 			}
-			console.log(currentState.users[i].username + " has won " + currentState.pot)
+		}
 		
 			reset(currentState)
-			return false
-				
-		}
+			
+			return false;
 
 	} else {
 		 
@@ -662,10 +664,11 @@ function fold(currentState){
     	for (var i = 0; i < currentState.users.length; i++){
     		if(currentState.users[i].folded === true || currentState.users[i].stack === 0){
     				AllInAndFoldCounter++
+    				console.log(AllInAndFoldCounter + "for fold")
     		}
     	}
 
-    	if (currentState.users.length - 1 <= AllInAndFoldCounter){
+    	if (currentState.users.length <= AllInAndFoldCounter){
     			return true;
     		} else {
 				nextTurn(currentState)
