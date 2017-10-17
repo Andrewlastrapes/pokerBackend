@@ -108,6 +108,7 @@ this.state = {
 	    	check(this.state)
 	    	io.emit("newState", this.state)
 		});
+         
 
 	       socket.on("Fold", () => {
 
@@ -134,13 +135,19 @@ this.state = {
               numOfTimesToLoop = 1
             }
 
-            for (var i = 1; i <= numOfTimesToLoop; i++){
-              setTimeout( () => {
-                nextPhase(this.state)
-                io.emit("newState", this.state)
-              }, 2000 * numOfTimesToLoop)
-            }
+             var zoom = function(loopCounter){
+              if (loopCounter > 0){
+                setTimeout( () => {
+                   nextPhase(this.state)
+                  io.emit("newState", this.state)
+                  zoom(loopCounter - 1)
+                }, 2000)
+              }
+            }.bind(this);
+              zoom(numOfTimesToLoop)
           }
+        
+
         });
 
       

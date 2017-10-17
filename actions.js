@@ -105,10 +105,9 @@ function payOutWinners(users, payout){
 	var amount = payout/users.length
 	for (var i = 0; i < users.length; i++){
 		users[i].stack += amount
-		console.log(users[i].username + " has won " + payout)
 		usernames.push(users[i].username)
 	}
-	console.log(usernames)
+
 	return usernames
 	
 }
@@ -157,7 +156,8 @@ function resolveWinner(currentState){
 		var payout = numContributed * smallestPot
 		payOutWinners(winners, payout)
 		currentState.winners.push(winners)
-	}
+	}	
+	
 
 
 
@@ -335,7 +335,6 @@ function nextPhase(currentState){
 	}
 	else if(currentState.phase === "river"){
 		resolveWinner(currentState)
-		// Winner message
 		reset(currentState)
 	}
 }
@@ -639,7 +638,6 @@ function fold(currentState){
 	if(currentState.users.length - currentState.fold === 1){
 		for (var i = 0; i < currentState.users.length; i++) {
 			if (currentState.users[i].folded === false){
-				console.log("User wins stack")
 				currentState.users[i].stack += currentState.pot
 				console.log(currentState.users[i].username + " has won " + currentState.pot)
 				
@@ -738,5 +736,6 @@ module.exports = {
 	check,
 	raise,
 	nextPhase
+	
 	
 }
