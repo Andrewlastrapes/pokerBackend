@@ -23,9 +23,10 @@ this.state = {
 
 	io.on('connection', (socket) => { 
 		console.log("Someone connected")
+    console.log(socket.handshake.query)
     socket.emit("socket id", socket.id)
 			var newUser = {
-         username : "User",
+         username : socket.handshake.query.username,
           clock : Date(),
           stack : 50,
           hand : [],
@@ -85,12 +86,17 @@ this.state = {
               numOfTimesToLoop = 1
             }
 
-            for (var i = 1; i <= numOfTimesToLoop; i++){
-              setTimeout( () => {
-                nextPhase(this.state)
-                io.emit("newState", this.state)
-              }, 2000 * numOfTimesToLoop)
-            }
+            
+            var zoom = function(loopCounter){
+              if (loopCounter > 0){
+                setTimeout( () => {
+                   nextPhase(this.state)
+                  io.emit("newState", this.state)
+                  zoom(loopCounter - 1)
+                }, 2000)
+              }
+            }.bind(this);
+              zoom(numOfTimesToLoop)
           }
           
 	    	
@@ -142,8 +148,8 @@ this.state = {
 
 
 		socket.on("disconnect", () => {
-			console.log(this.state.users)
-      console.log(socket.id)
+			
+      
       var disconnectingUser = []
 
       for(var i = 0; i < this.state.users.length; i++){

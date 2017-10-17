@@ -111,6 +111,11 @@ router.get("/nba", function(req, res, next){
 
 });
 
+router.get('/poker', function(req, res) {
+	
+	res.render("poker", {user : JSON.stringify(req.user)})
+})
+
 
 router.post('/register', function(req, res) {
 		

@@ -384,21 +384,21 @@ function deal(currentState){
 	// Remove busted players 
 
 
-	var busted = []
+	// var busted = []
 
-	for (var i = 0; i < currentState.users.length; i++){
-		if(currentState.users[i].stack === 0){
-			busted.push(i)
-		}
+	// for (var i = 0; i < currentState.users.length; i++){
+	// 	if(currentState.users[i].stack === 0){
+	// 		busted.push(i)
+	// 	}
 
 			
-	}
+	// }
 
-	console.log(busted)
+	// console.log(busted)
 
-	for (var i = 0; busted.length; i++){
-			currentState.users.splice(busted[i], 1)
-		}
+	// for (var i = 0; busted.length; i++){
+	// 		currentState.users.splice(busted[i], 1)
+	// 	}
 
 
 	
