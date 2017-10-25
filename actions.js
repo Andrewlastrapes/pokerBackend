@@ -229,7 +229,7 @@ function reset(currentState){
 		currentState.users[i].folded = false;
 		currentState.users[i].totalBetThisHand = 0;
 	}
-		currentState.pot = 0;
+		
 		currentState.fold = 0;
 		currentState.phase = "Game Over";
 		currentState.flop = [];
@@ -399,6 +399,7 @@ function deal(currentState){
 	// 		currentState.users.splice(busted[i], 1)
 	// 	}
 
+	currentState.pot = 0;
 
 	
 	for (var i = 0; i < currentState.waitingRoom.length; i++){

@@ -4,6 +4,7 @@ var passport = require("passport");
 var LocalStrategy = require("passport-local").Strategy;
 var http = require("http");
 var axios = require("axios");
+const fs = require("fs")
 
 
 
@@ -12,7 +13,9 @@ var User = require('../models/model');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('layout', { title: 'Express' });
+  
+	res.render("layout")
+
 });
 
 router.get("/register", function(req, res){
@@ -113,8 +116,30 @@ router.get("/nba", function(req, res, next){
 
 router.get('/poker', function(req, res) {
 	
-	res.render("poker", {user : JSON.stringify(req.user)})
-})
+	var file = ""
+	var cssfile = ""
+
+	fs.readdir("./public/static/js/", (err, files) => {
+		console.log(err)
+		files.forEach(js => {
+			if (!js.includes("map")){
+			file = js
+			}
+		}) 
+		fs.readdir("./public/static/css/", (err, files) => {
+			files.forEach(css => {
+				if (!css.includes("map")){
+					cssfile = css
+				}
+			})
+			res.render("poker", 
+				{user : JSON.stringify(req.user),
+				 file : "/static/js/" + file,
+				 cssfile : "/static/css/" + cssfile
+			});
+		})
+	}); 
+});
 
 
 router.post('/register', function(req, res) {
