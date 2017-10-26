@@ -9,6 +9,7 @@
     "ajax-request": "^1.2.3",
     "axios": "^0.16.2",
     "bcrypt": "^1.0.3",
+    "bcryptjs": "^2.4.3",
     "bluebird": "^3.5.1",
     "body-parser": "~1.17.1",
     "connect-flash": "^0.1.1",
