@@ -11,7 +11,7 @@ html, body {
 a {
 	color: #102542;
 	font-family: 'Quicksand', sans-serif;
-	font-size: 17px;
+	font-size: 3vw;
 	font-weight: 900;
 
 	text-shadow: 0 1px 0 #ccc,
@@ -33,7 +33,7 @@ a {
  h2 {
   	color: #102542;
 	font-family: 'Quicksand', sans-serif;
-	font-size: 30px;
+	font-size: 3vw;
 	font-weight: 900;
 
 	text-shadow: 0 1px 0 #ccc,
