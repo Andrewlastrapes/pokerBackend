@@ -13,6 +13,7 @@ a {
 	font-family: 'Quicksand', sans-serif;
 	font-size: 3vw;
 	font-weight: 900;
+     text-decoration: none;
 
 	text-shadow: 0 1px 0 #ccc,
                0 2px 0 #c9c9c9,
@@ -35,6 +36,7 @@ a {
 	font-family: 'Quicksand', sans-serif;
 	font-size: 3vw;
 	font-weight: 900;
+     text-decoration: none;
 
 	text-shadow: 0 1px 0 #ccc,
                0 2px 0 #c9c9c9,
@@ -53,6 +55,7 @@ a {
 
 li {
 	padding-top: 15px;
+     text-decoration: none;
 }
 
  
