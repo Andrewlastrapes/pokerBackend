@@ -736,7 +736,8 @@ module.exports = {
 	call,
 	check,
 	raise,
-	nextPhase
+	nextPhase,
+	reset
 	
 	
 }

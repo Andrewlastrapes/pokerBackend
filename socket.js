@@ -1,4 +1,4 @@
-let {deal, fold, call, check, raise, nextPhase} = require('./actions.js');
+let {deal, fold, call, check, raise, nextPhase, reset} = require('./actions.js');
 
 module.exports = function setUpSockets(io){
 
@@ -165,11 +165,16 @@ this.state = {
          
          disconnectingUser = i
 
-          console.log(this.state.users[i].socketID + "disconnected")
+         
         }
       }
 
        this.state.users.splice(disconnectingUser, 1)
+
+       if (this.state.users.length < 2){
+          reset()
+          this.state.hand = 0
+       }
       
       io.emit("newState", this.state)
 		});
