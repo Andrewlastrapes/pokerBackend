@@ -228,6 +228,7 @@ function reset(currentState){
 		currentState.users[i].Rmarker = false;
 		currentState.users[i].folded = false;
 		currentState.users[i].totalBetThisHand = 0;
+
 	}
 		
 		currentState.fold = 0;
@@ -235,6 +236,7 @@ function reset(currentState){
 		currentState.flop = [];
 		currentState.turn = [];
 		currentState.river = [];
+		currentState.winners = [];
 
 	
 }
