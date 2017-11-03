@@ -236,7 +236,7 @@ function reset(currentState){
 		currentState.flop = [];
 		currentState.turn = [];
 		currentState.river = [];
-		currentState.winners = [];
+		
 
 	
 }
@@ -379,7 +379,8 @@ function deal(currentState){
 	// Pushes waiting room users into users array 
 
 	currentState.handNumber++
-	console.log("handNumber = " + currentState.handNumber)
+	console.log("handNumber = " + currentState.handNumber);
+	currentState.winners = [];
 
 
 	// Remove busted players 
@@ -642,7 +643,7 @@ function fold(currentState){
 		for (var i = 0; i < currentState.users.length; i++) {
 			if (currentState.users[i].folded === false){
 				currentState.users[i].stack += currentState.pot
-				console.log(currentState.users[i].username + " has won " + currentState.pot)
+				winners.push(currentState.users[i].username)
 				
 
 			}
