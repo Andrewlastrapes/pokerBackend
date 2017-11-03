@@ -643,7 +643,7 @@ function fold(currentState){
 		for (var i = 0; i < currentState.users.length; i++) {
 			if (currentState.users[i].folded === false){
 				currentState.users[i].stack += currentState.pot
-				currentState.winners.push([currentState.users[i].username])
+				currentState.winners.push([currentState.users[i]])
 				
 
 			}
