@@ -170,7 +170,7 @@ this.state = {
       }
 
        this.state.users.splice(disconnectingUser, 1)
-
+       
        if (this.state.users.length < 2){
           reset()
           this.state.hand = 0
