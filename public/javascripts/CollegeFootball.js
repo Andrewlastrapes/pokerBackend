@@ -26,6 +26,7 @@ $.ajax({
 				val: $('.GamesTeam' + i).text(),
 				placeholder: "Enter Team, or choose over or under.",
 			})
+			)
 			$(".Games").append("<br>")
 			$(".Games").append(
 				$("<input>", {
