@@ -24,17 +24,18 @@ $.ajax({
 			$('<input>', {
 				type: 'text',
 				val: $('.GamesTeam' + i).text(),
-				placeholder: "Enter Team, or choose over or under.",
+				placeholder: "Enter Team, or over/under.",
 			})
 			)
-			$(".Games").append("<br>")
-			$(".Games").append(
-				$("<input>", {
-					type: 'text',
-					val: $(".GamesAmount" + i).text(),
-					placeholder: "Enter bet amount"
-				})
-				)
+		$(".Games").append("<br>")
+		$(".Games").append(
+			$("<input>", {
+				type: 'text',
+				val: $(".GamesAmount" + i).text(),
+				placeholder: "Enter bet amount"
+			})
+			)
+		$(".Games").append("<br>")
 		$(".Games").append(
 			$('<input>', {
 				type: "submit"
