@@ -10,7 +10,7 @@ $.ajax({
 	
 
 	for (var i = 0; i < CollegeFootball.length; i++){
- 
+
 		
 
 		$(".Games").append(CollegeFootball[i].AwayTeam + " @ " + CollegeFootball[i].HomeTeam + "<br>")
@@ -18,7 +18,7 @@ $.ajax({
 		$(".Games").append(CollegeFootball[i].AwayTeam + ": " + CollegeFootball[i].Odds[0].PointSpreadAway + "<br>")
 		$(".Games").append("Over/Under: " + CollegeFootball[i].Odds[0].TotalNumber + "<br>")
 		$(".Games").append(CollegeFootball[i].HomeTeam + " Money Line: " + CollegeFootball[i].Odds[0].MoneyLineHome+ "<br>")
-		$(".Games").append(CollegeFootball[i].AwayTeam + " Money Line: " +CollegeFootball[i].Odds[0].MoneyLineAway+ "<br>" + "<br>" + "<br>" + "<br>")
+		$(".Games").append(CollegeFootball[i].AwayTeam + " Money Line: " +CollegeFootball[i].Odds[0].MoneyLineAway)
 
 		$(".Games").append(
 			$('<input>', {
@@ -26,6 +26,7 @@ $.ajax({
 				val: $('.Games' + i).text()
 			})
 			);
+		$(".Games").append("<br>" + "<br>" + "<br>" + "<br>")
 
 }
 })
