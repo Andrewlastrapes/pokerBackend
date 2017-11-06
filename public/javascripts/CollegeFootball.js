@@ -35,7 +35,6 @@ $.ajax({
 					placeholder: "Enter bet amount"
 				})
 				)
-			);
 		$(".Games").append(
 			$('<input>', {
 				type: "submit"
