@@ -23,7 +23,7 @@ $.ajax({
 		$(".Games").append(
 			$('<input>', {
 				type: 'text',
-				val: $('.GamesTeam' + i).text()
+				val: $('.GamesTeam' + i).text(),
 				placeholder: "Enter Team, or choose over or under.",
 			})
 			$(".Games").append("<br>")
