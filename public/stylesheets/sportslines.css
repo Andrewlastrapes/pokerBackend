@@ -17,3 +17,8 @@ body {
 h3 {
 	color: black;
 }
+
+img {
+	height: 10vw;
+	width: 10vw;
+}
